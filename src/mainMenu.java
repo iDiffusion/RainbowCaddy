@@ -6,6 +6,9 @@ import java.awt.Toolkit;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class mainMenu {
 
@@ -53,16 +56,7 @@ public class mainMenu {
 		frmRainbowCaddy.getContentPane().add(btnPrint);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(519, 296, 89, 60);
+		panel.setBounds(10, 11, 499, 413);
 		frmRainbowCaddy.getContentPane().add(panel);
-		
-		JLabel lblHole = new JLabel("Hole");
-		panel.add(lblHole);
-		
-		JSpinner spinner = new JSpinner();
-		panel.add(spinner);
-		
-		JButton btnAddobj = new JButton("Add .obj");
-		panel.add(btnAddobj);
 	}
 }
