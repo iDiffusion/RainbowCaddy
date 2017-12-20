@@ -41,7 +41,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 /**
- * @author Oskar
+ * @author Oskar and Keegan Bruer
  */
 public class OBJLoader {
 
@@ -144,7 +144,7 @@ public class OBJLoader {
     }
 
     public static Model loadModel(File f) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(f));
+		BufferedReader reader = new BufferedReader(new FileReader(f));
         Model m = new Model();
         String line;
         while ((line = reader.readLine()) != null) {
@@ -165,6 +165,7 @@ public class OBJLoader {
                 throw new RuntimeException("OBJ file contains line which cannot be parsed correctly: " + line);
             }
         }
+        reader.close();
         return m;
     }
 

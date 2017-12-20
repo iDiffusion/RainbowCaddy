@@ -1,16 +1,13 @@
-import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 public class controlFrame implements Runnable {
 
@@ -41,6 +38,8 @@ public class controlFrame implements Runnable {
 	private void initialize() {
 		System.out.println("New Thread");
 		frame = new JFrame();
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/rainbowCaddyIcon.ico"));
+		frame.setTitle("Rainbow Caddy");
 		frame.setBounds(100, 100, 120, 474);
 		frame.setLocation(100 + 634, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,8 +54,6 @@ public class controlFrame implements Runnable {
 
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	JButton btn =  (JButton) e.getSource();
-		        if(btn.isSelected()) {
 		        	System.out.println("Refreshing");
 		        	try {
 						mainMenu.m = OBJLoader.loadModel(new File("res/model/model.obj"));
@@ -64,7 +61,6 @@ public class controlFrame implements Runnable {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-		        }
 		    }
 		});
 
