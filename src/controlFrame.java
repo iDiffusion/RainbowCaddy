@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+/**@author Ikaika Lee*/
 public class controlFrame implements Runnable {
 
 	private JFrame frame;
@@ -46,6 +47,10 @@ public class controlFrame implements Runnable {
 		frame.getContentPane().setLayout(null);
 		
 		JButton btnPrint = new JButton("Print");
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnPrint.setBounds(10, 227, 100, 23);
 		
 		JButton btnRefresh = new JButton("Refresh");
@@ -54,9 +59,13 @@ public class controlFrame implements Runnable {
 
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        	System.out.println("Refreshing");
+		        	System.out.println("Refreshing...");
 		        	try {
-						mainMenu.m = OBJLoader.loadModel(new File("res/model/model.obj"));
+		        		if (mainMenu.m.hasTextureCoordinates()) {
+		        			mainMenu.m = OBJLoader.loadTexturedModel(new File("res/model/model.obj"));
+		        		} else {
+		        			mainMenu.m = OBJLoader.loadModel(new File("res/model/model.obj"));
+		        		}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -64,12 +73,12 @@ public class controlFrame implements Runnable {
 		    }
 		});
 
-		
-		
+		/* Add buttons to side frame */
 		frame.getContentPane().add(btnPrint);
 		frame.getContentPane().add(btnRefresh); 
+		
+		/* Wait for close button to be pressed*/
 		frame.addWindowListener(new WindowListener() {
-
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				mainMenu.frameOpen = false;
@@ -79,37 +88,31 @@ public class controlFrame implements Runnable {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowDeactivated(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowDeiconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowIconified(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void windowOpened(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 			
 		});

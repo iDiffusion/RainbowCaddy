@@ -28,7 +28,6 @@
  */
 
 
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -41,11 +40,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 /**
- * @author Oskar and Keegan Bruer
+ * @author Oskar, modified by Keegan Bruer
  */
 public class OBJLoader {
 
-    public static int createDisplayList(Model m) {
+    private static BufferedReader reader;
+
+	public static int createDisplayList(Model m) {
         int displayList = glGenLists(1);
         glNewList(displayList, GL_COMPILE);
         {
@@ -111,7 +112,7 @@ public class OBJLoader {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         return new int[]{vboVertexHandle, vboNormalHandle};
     }
-
+    
     private static Vector3f parseVertex(String line) {
         String[] xyz = line.split(" ");
         float x = Float.valueOf(xyz[1]);
@@ -144,7 +145,7 @@ public class OBJLoader {
     }
 
     public static Model loadModel(File f) throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(f));
+		reader = new BufferedReader(new FileReader(f));
         Model m = new Model();
         String line;
         while ((line = reader.readLine()) != null) {
@@ -232,7 +233,7 @@ public class OBJLoader {
             }
             if (line.startsWith("mtllib ")) {
                 String materialFileName = line.split(" ")[1];
-                File materialFile = new File(f.getParentFile().getAbsolutePath() + "/" + materialFileName);
+                File materialFile = new File("res/model/" + materialFileName);
                 BufferedReader materialFileReader = new BufferedReader(new FileReader(materialFile));
                 String materialLine;
                 Model.Material parseMaterial = new Model.Material();
@@ -248,26 +249,32 @@ public class OBJLoader {
                         parseMaterialName = materialLine.split(" ")[1];
                         parseMaterial = new Model.Material();
                     } else if (materialLine.startsWith("Ns ")) {
-                        parseMaterial.specularCoefficient = Float.valueOf(materialLine.split(" ")[1]);
+                        parseMaterial.specularCoefficient = Float.valueOf(materialLine.split("  ")[1]);
                     } else if (materialLine.startsWith("Ka ")) {
                         String[] rgb = materialLine.split(" ");
-                        parseMaterial.ambientColour[0] = Float.valueOf(rgb[1]);
-                        parseMaterial.ambientColour[1] = Float.valueOf(rgb[2]);
-                        parseMaterial.ambientColour[2] = Float.valueOf(rgb[3]);
+                        parseMaterial.ambientColour[0] = Float.valueOf(rgb[2]);
+                        parseMaterial.ambientColour[1] = Float.valueOf(rgb[3]);
+                        parseMaterial.ambientColour[2] = Float.valueOf(rgb[4]);
                     } else if (materialLine.startsWith("Ks ")) {
                         String[] rgb = materialLine.split(" ");
-                        parseMaterial.specularColour[0] = Float.valueOf(rgb[1]);
-                        parseMaterial.specularColour[1] = Float.valueOf(rgb[2]);
-                        parseMaterial.specularColour[2] = Float.valueOf(rgb[3]);
+                        parseMaterial.specularColour[0] = Float.valueOf(rgb[2]);
+                        parseMaterial.specularColour[1] = Float.valueOf(rgb[3]);
+                        parseMaterial.specularColour[2] = Float.valueOf(rgb[4]);
                     } else if (materialLine.startsWith("Kd ")) {
                         String[] rgb = materialLine.split(" ");
-                        parseMaterial.diffuseColour[0] = Float.valueOf(rgb[1]);
-                        parseMaterial.diffuseColour[1] = Float.valueOf(rgb[2]);
-                        parseMaterial.diffuseColour[2] = Float.valueOf(rgb[3]);
+                        parseMaterial.diffuseColour[0] = Float.valueOf(rgb[2]);
+                        parseMaterial.diffuseColour[1] = Float.valueOf(rgb[3]);
+                        parseMaterial.diffuseColour[2] = Float.valueOf(rgb[4]);
                     } else if (materialLine.startsWith("map_Kd")) {
-                        parseMaterial.texture = TextureLoader.getTexture("PNG",
+                        parseMaterial.texture = TextureLoader.getTexture("JPG",
                                 new FileInputStream(new File(f.getParentFile().getAbsolutePath() + "/" + materialLine
                                         .split(" ")[1])));
+                    } else if (materialLine.startsWith("d ")) {
+                    	continue;
+                    } else if (materialLine.startsWith("illum ")) {
+                    	continue;
+                    } else if (materialLine.equals("")) {
+                    	continue;
                     } else {
                         System.err.println("[MTL] Unknown Line: " + materialLine);
                     }
@@ -279,19 +286,19 @@ public class OBJLoader {
             } else if (line.startsWith("v ")) {
                 String[] xyz = line.split(" ");
                 float x = Float.valueOf(xyz[1]);
-                float y = Float.valueOf(xyz[2]);
-                float z = Float.valueOf(xyz[3]);
+                float z = Float.valueOf(xyz[2]);
+                float y = Float.valueOf(xyz[3]);
                 m.getVertices().add(new Vector3f(x, y, z));
             } else if (line.startsWith("vn ")) {
                 String[] xyz = line.split(" ");
                 float x = Float.valueOf(xyz[1]);
-                float y = Float.valueOf(xyz[2]);
-                float z = Float.valueOf(xyz[3]);
+                float z = Float.valueOf(xyz[2]);
+                float y = Float.valueOf(xyz[3]);
                 m.getNormals().add(new Vector3f(x, y, z));
             } else if (line.startsWith("vt ")) {
                 String[] xyz = line.split(" ");
-                float s = Float.valueOf(xyz[1]);
-                float t = Float.valueOf(xyz[2]);
+                float t = Float.valueOf(xyz[1]);
+                float s = Float.valueOf(xyz[2]);
                 m.getTextureCoordinates().add(new Vector2f(s, t));
             } else if (line.startsWith("f ")) {
                 String[] faceIndices = line.split(" ");
@@ -320,6 +327,12 @@ public class OBJLoader {
             } else if (line.startsWith("s ")) {
                 boolean enableSmoothShading = !line.contains("off");
                 m.setSmoothShadingEnabled(enableSmoothShading);
+            } else if (line.startsWith("d ")) {
+            	continue;
+            } else if (line.startsWith("illum ")) {
+            	continue;
+            } else if (line.equals(" ")) {
+            	continue;
             } else {
                 System.err.println("[OBJ] Unknown Line: " + line);
             }

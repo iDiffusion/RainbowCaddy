@@ -1,8 +1,10 @@
 import javax.vecmath.Vector3f;
 
+/**@author Liam Marshall */
 public class Point implements Comparable<Point> {
 	public Vector3f xyz;
 	public Vector3f rgb;
+	
 	public Point(double x, double y, double z, double r, double g, double b) {
 		xyz = new Vector3f();
 		rgb = new Vector3f();
@@ -23,7 +25,6 @@ public class Point implements Comparable<Point> {
 	public void setZ(double z) {
 		xyz.z = (float) z;
 	}
-	
 	public void setR(double r) {
 		rgb.x = (float) r;
 	}
@@ -34,7 +35,6 @@ public class Point implements Comparable<Point> {
 		rgb.z = (float) b;
 	}
 	
-	
 	public float getX() {
 		return xyz.x;
 	}
@@ -44,7 +44,6 @@ public class Point implements Comparable<Point> {
 	public float getZ() {
 		return xyz.z;
 	}
-	
 	public float getR() {
 		return rgb.x;
 	}
@@ -54,7 +53,13 @@ public class Point implements Comparable<Point> {
 	public float getB() {
 		return rgb.z;
 	}
-
+	public Vector3f getXYZ() {
+		return xyz;
+	}
+	public Vector3f getRGB() {
+		return rgb;
+	}
+	
 	@Override
 	public int compareTo(Point p) {
 		return (int)(((this.xyz.y - p.getY() ) * 2) + (this.xyz.x - p.getX())) * 100;

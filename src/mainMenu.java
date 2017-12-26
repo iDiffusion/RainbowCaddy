@@ -1,7 +1,11 @@
+import static org.lwjgl.opengl.GL11.GL_AMBIENT;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DIFFUSE;
 import static org.lwjgl.opengl.GL11.GL_FILL;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
 import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
+import static org.lwjgl.opengl.GL11.GL_SHININESS;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -9,8 +13,11 @@ import static org.lwjgl.opengl.GL11.glColor3d;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glGenLists;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMaterial;
+import static org.lwjgl.opengl.GL11.glMaterialf;
 import static org.lwjgl.opengl.GL11.glNormal3f;
 import static org.lwjgl.opengl.GL11.glPolygonMode;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex3f;
 
 import java.awt.Canvas;
@@ -26,9 +33,10 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-
+/**@author Keegan Bruer */
 public class mainMenu {
 
 	public JFrame frmRainbowCaddy;
@@ -62,11 +70,9 @@ public class mainMenu {
 		frmRainbowCaddy.setBounds(100, 100, 634, 474);
 		frmRainbowCaddy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmRainbowCaddy.getContentPane().setLayout(null);
-		
-		
+	
 		Canvas canvas = new Canvas();
-		canvas.setSize(frmRainbowCaddy.getWidth(), frmRainbowCaddy.getHeight());
-		
+		canvas.setSize(frmRainbowCaddy.getWidth(), frmRainbowCaddy.getHeight());	
 		
 		frmRainbowCaddy.getContentPane().add(canvas);
 		frmRainbowCaddy.setUndecorated(true);
@@ -100,7 +106,9 @@ public class mainMenu {
 	        glGenLists(1);
 	        GL11.glShadeModel(GL11.GL_SMOOTH);
 	        try {
+	          //m = OBJLoader.loadTexturedModel(new File("res/model/model.obj"));
 	            m = OBJLoader.loadModel(new File("res/model/model.obj"));
+	            System.out.println("Model Loaded");
 	        } catch (FileNotFoundException e) {
 	            e.printStackTrace();
 	            Display.destroy();
@@ -113,7 +121,7 @@ public class mainMenu {
 	    }
 	
 	private static void checkInput() {
-        //camera.processMouse(1, 80, -80);
+      //camera.processMouse(1, 80, -80);
         camera.processKeyboard(16, 10, 10, 10);
         if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
@@ -140,27 +148,40 @@ public class mainMenu {
         
         glBegin(GL_TRIANGLES);
         for (Model.Face face : m.getFaces()) {
-        	glColor3d(0,0,1); //green
+        	//glColor3d(0,0,1); //green
             Vector3f n1 = m.getNormals().get(face.getNormalIndices()[0] - 1);
             glNormal3f(n1.x, n1.y, n1.z);
+            if (m.hasTextureCoordinates()) {
+            	Vector2f t1 = m.getTextureCoordinates().get(face.getTextureCoordinateIndices()[0] - 1);
+            	GL11.glTexCoord2f(t1.x, t1.y);
+            }
             Vector3f v1 = m.getVertices().get(face.getVertexIndices()[0] - 1);
             glVertex3f(v1.x, v1.y, v1.z);
 
-        	glColor3d(0,1,0); //green
+        	//glColor3d(0,1,0); //green
             Vector3f n2 = m.getNormals().get(face.getNormalIndices()[1] - 1);
             glNormal3f(n2.x, n2.y, n2.z);
+            if (m.hasTextureCoordinates()) {
+            	Vector2f t2 = m.getTextureCoordinates().get(face.getTextureCoordinateIndices()[1] - 1);
+            	GL11.glTexCoord2f(t2.x, t2.y);
+            }
             Vector3f v2 = m.getVertices().get(face.getVertexIndices()[1] - 1);
             glVertex3f(v2.x, v2.y, v2.z);
 
-        	glColor3d(1,0,0); //green
+        	//glColor3d(1,0,0); //green
             Vector3f n3 = m.getNormals().get(face.getNormalIndices()[2] - 1);
             glNormal3f(n3.x, n3.y, n3.z);
+            if (m.hasTextureCoordinates()) {
+            	Vector2f t3 = m.getTextureCoordinates().get(face.getTextureCoordinateIndices()[2] - 1);
+            	GL11.glTexCoord2f(t3.x, t3.y);
+            }
             Vector3f v3 = m.getVertices().get(face.getVertexIndices()[2] - 1);
             glVertex3f(v3.x, v3.y, v3.z);
         }
         glEnd();
+       
     }
-
+    
     private static void setUpCamera() {
     	//----------- SIDE - ABOVE -----------
 //        camera = new EulerCamera.Builder().setAspectRatio((float) Display.getWidth() / Display.getHeight())
