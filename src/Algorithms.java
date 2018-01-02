@@ -13,7 +13,7 @@ public class Algorithms {
 
 	public static int partitionY(ArrayList<Point> a, int left, int right) {
 	    int i = left-1, j = right;
-	    Point p = new Point(a.get(right).getX(), a.get(right).getY(), a.get(right).getZ(), a.get(right).getR(), a.get(right).getG(), a.get(right).getB());
+	    Point p = new Point(a.get(right).getX(), a.get(right).getY(), a.get(right).getZ(), a.get(right).getRGBAsArray()[0], a.get(right).getRGBAsArray()[1], a.get(right).getRGBAsArray()[2]);
 	    while (true) {
 	        while (LESS(a.get(++i).getY(),p.getY()));
 	        while (LESS(p.getY(),a.get(--j).getY())) if (j == left) break;
@@ -35,7 +35,7 @@ public class Algorithms {
 
 	public static int partitionX(ArrayList<Point> a, int left, int right) {
 	    int i = left-1, j = right;
-	    Point p = new Point(a.get(right).getX(), a.get(right).getY(), a.get(right).getZ(), a.get(right).getR(), a.get(right).getG(), a.get(right).getB());
+	    Point p = new Point(a.get(right).getX(), a.get(right).getY(), a.get(right).getZ(), a.get(right).getRGBAsArray()[0], a.get(right).getRGBAsArray()[1], a.get(right).getRGBAsArray()[2]);
 	    while (true) {
 	        while (LESS(a.get(++i).getX(),p.getX()));
 	        while (LESS(p.getX(),a.get(--j).getX())) if (j == left) break;
@@ -47,13 +47,21 @@ public class Algorithms {
 	}
 	
 	public static void EXCH(Point a, Point b) {
-		Point temp = new Point(a.getX(), a.getY(), a.getZ(), a.getR(), a.getG(), a.getB());
+		Point temp = new Point(a.getX(), a.getY(), a.getZ(), a.getRGBAsArray()[0], a.getRGBAsArray()[1], a.getRGBAsArray()[2]);
 		
-		a.rgb = b.rgb;
-		a.xyz = b.xyz;
+		a.r = b.r;
+		a.g = b.g;
+		a.b = b.b;
+		a.x = b.x;
+		a.y = b.y;
+		a.z = b.z;
 		
-		b.rgb = temp.rgb;
-		b.xyz = temp.xyz;
+		b.r = temp.r;
+		b.g = temp.g;
+		b.b = temp.b;
+		b.x = temp.x;
+		b.y = temp.y;
+		b.z = temp.z;
 	}
 	
 	public static boolean LESS(double l, double r) {
