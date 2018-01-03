@@ -58,7 +58,7 @@ public class Boot {
 		refreshBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Boot.mesh.setColor(255, 255, 255);
 			}
 		});
 		frame.getContentPane().add(refreshBtn);

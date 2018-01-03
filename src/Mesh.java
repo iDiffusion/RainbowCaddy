@@ -14,7 +14,7 @@ import com.jogamp.opengl.GL2;
 public class Mesh {
 	ArrayList<Point> points = new ArrayList<Point>();
 	ArrayList<Face> faces = new ArrayList<Face>();
-	double minX = 0, minY = 0, maxX = 0, maxY = 0;
+	double minX = 0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0;
 	/**
 	 * Create an empty mesh
 	 */
@@ -152,6 +152,10 @@ public class Mesh {
 				minZ = p.z;
 			}
 		}
+		System.out.println("Minimum X: "+ minX +"   Maximum X: "+ maxX +"\n");
+		System.out.println("Minimum Y: "+ minY +"   Maximum Y: "+ maxY +"\n");
+		System.out.println("Minimum Z: "+ minZ +"   Maximum Z: "+ maxZ +"\n");
+		
 		Point center = new Point(minX + ((maxX-minX)/2), minY + ((maxY-minY)/2), minZ + ((maxZ-minZ)/2));
 		for(Point p : points) {
 			p.x -= center.x;
@@ -210,6 +214,7 @@ public class Mesh {
 //        }
 //        return largest;
 //	}
+	
 	public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
@@ -229,18 +234,27 @@ public class Mesh {
 	
 	private void findExtremes() {
 		for (Point p : points) {
-			if (p.x < minX) {
-				minX = p.x;
-			} 
 			if (p.x > maxX) {
 				maxX = p.x;
 			}
-			if (p.y < minY) {
-				minY = p.y;
+			if (p.x < minX) {
+				minX = p.x;
 			}
 			if (p.y > maxY) {
 				maxY = p.y;
 			}
+			if (p.y < minY) {
+				minY = p.y;
+			}
+			if (p.z > maxZ) {
+				maxZ = p.z;
+			}
+			if (p.z < minZ) {
+				minZ = p.z;
+			}
 		}
+		System.out.println("Minimum X: "+ minX +"   Maximum X: "+ maxX +"\n");
+		System.out.println("Minimum Y: "+ minY +"   Maximum Y: "+ maxY +"\n");
+		System.out.println("Minimum Z: "+ minZ +"   Maximum Z: "+ maxZ +"\n");
 	}
 }

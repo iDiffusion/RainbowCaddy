@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -226,19 +227,28 @@ public class Display extends JFrame implements GLEventListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		Boot.mesh.setColor(255, 255, 255);
-//		double mouseX = e.getX() - (this.getWidth() /2);
-//		double mouseY = e.getY() - (this.getHeight() /2);
-//		
-//		
-//		System.out.println(mouseX + " " + mouseY);
-//		double error = 3;
-//		for (Point p : Boot.mesh.points) {
-//			if (p.x > mouseX-error && p.x < mouseX+error && p.y > mouseY-error && p.y < mouseY+error) {
-//				p.setRGB(0, 255, 0);
-//			}
-//		}
-	}
+        Boot.mesh.setColor(255, 255, 255);
+//        double mouseX = e.getX() - (this.getWidth() /2);
+//        double mouseY = e.getY() - (this.getHeight() /2);
+//        
+//        System.out.println(mouseX + " " + mouseY);
+//        double error = 3;
+//        for (Point p : Boot.mesh.points) {
+//            if (p.x > mouseX-error && p.x < mouseX+error && p.y > mouseY-error && p.y < mouseY+error) {
+//                p.setRGB(0, 255, 0);
+//            }
+//        }
+        
+        double x = Mesh.map(0.0, -10.0, 10.0, -19.5, 26.6);
+        double y = Mesh.map(0.0, -10.0, 10.0, -13.7, 40.7);
+        Point center = new Point(x, y, 0.0);
+        System.out.print(center.getXYZ());
+        ArrayList<Point> tempPoints = CircleGen.nearestNeighbor(center, Boot.mesh.points, 1);
+        System.out.print(tempPoints.size());
+        System.out.println("test");
+        CircleGen.circleGeneration(center, Boot.mesh.points, 360, 5);
+        System.out.println("Success");
+    }
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
