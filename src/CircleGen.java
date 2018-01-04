@@ -135,7 +135,11 @@ public class CircleGen {
 			return false;
 		}
 	}
-	
+	/**
+	 * returns all points between two given points
+	 * @param point1 - the first point location
+	 * @param point2 - the second point location
+	 */
 	private static ArrayList<Point> axisList(Point point1, Point point2){
 	    double dist = .000001;
 	    double distanceBetween = (Math.sqrt(Math.pow(point2.getX()-point1.getX(), 2) + Math.pow(point2.getY() - point1.getY(), 2) + Math.pow(point2.getZ() - point2.getZ(), 2)));
