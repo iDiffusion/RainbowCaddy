@@ -43,7 +43,7 @@ public class Circle {
         double degCount=0;
         double degree = (float) 360/numSpokes;
         ring = new ArrayList<Point>();
-        for(degCount=0; degCount<numSpokes; degCount+=degree){
+        for(degCount=0; degCount<360; degCount+=degree){
             deltax = radius*Math.cos(degCount);
             deltay = radius*Math.sin(degCount);
             Point tempPoint = new Point(center.getX() + deltax,center.getY() + deltay, 0);
