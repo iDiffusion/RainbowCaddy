@@ -2,38 +2,67 @@ import java.util.ArrayList;
 
 public class Algorithms {
 	public static void quicksortX(ArrayList<Point> a, int left, int right) {
-		boolean flag = true;   // set flag to true to begin first pass
-		Point temp;   //holding variable
-		while (flag){
-			flag= false;    //set flag to false awaiting a possible swap
-			for(int i=0;  i < a.size() - 1;  i++ ){
-				if ( a.get(i).getX() < a.get(i+1).getX() ){
-					temp = a.get(i);                //swap elements
-					a.set(i, a.get(i+1));
-					a.set(i+1, temp);
-					flag = true;              //shows a swap occurred  
+		if(a.size() > 100000) {
+			boolean flag = true;   // set flag to true to begin first pass
+			Point temp;   //holding variable
+			while (flag){
+				flag= false;    //set flag to false awaiting a possible swap
+				for(int i=0;  i < a.size() - 1;  i++ ){
+					if ( a.get(i).getX() < a.get(i+1).getX() ){
+						temp = a.get(i);                //swap elements
+						a.set(i, a.get(i+1));
+						a.set(i+1, temp);
+						flag = true;              //shows a swap occurred  
+					} 
 				} 
 			} 
-		} 
+		}
+		else {
+			quicksortX2(a,left,right);
+		}
 	}
 
 	public static void quicksortY(ArrayList<Point> a, int left, int right) {
-	     boolean flag = true;   // set flag to true to begin first pass
-	     Point temp;   //holding variable
-	     while (flag){
-	    	flag= false;    //set flag to false awaiting a possible swap
-            for(int i=0;  i < a.size() - 1;  i++ ){
-            	if ( a.get(i).getY() < a.get(i+1).getY() ){
-                   temp = a.get(i);                //swap elements
-                   a.set(i, a.get(i+1));
-                   a.set(i+1, temp);
-                   flag = true;              //shows a swap occurred  
-            	} 
-            } 
-        } 
+		if(a.size() > 100000) {
+		    boolean flag = true;   // set flag to true to begin first pass
+		    Point temp;   //holding variable
+		    while (flag){
+		    	flag= false;    //set flag to false awaiting a possible swap
+	            for(int i=0;  i < a.size() - 1;  i++ ){
+	            	if ( a.get(i).getY() < a.get(i+1).getY() ){
+	                   temp = a.get(i);                //swap elements
+	                   a.set(i, a.get(i+1));
+	                   a.set(i+1, temp);
+	                   flag = true;              //shows a swap occurred  
+	            	} 
+	            } 
+		    }
+		}
+		else {
+		quicksortY2(a,left,right);
+		}
 	}
-}
-	/*public static void quicksortY(ArrayList<Point> a, int left, int right) {
+	public static ArrayList<Point> narrowList(ArrayList<Point> points, double x, double y, double accuracy){
+        double left = Math.floor(x) - (double) accuracy;
+        double right = Math.ceil(x) + (double) accuracy;
+        double up = Math.ceil(y) + (double) accuracy;
+        double down = Math.floor(y) - (double) accuracy;
+        
+        ArrayList<Point> newList = new ArrayList<Point>();
+        
+        for(Point p : points) {
+            if((p.getX() > left && p.getX() < right) && (p.getY() > down && p.getY() < up)) {
+                newList.add(p);
+            }
+            else {
+                continue;
+            }
+        }
+        return newList;
+	}
+
+        
+	public static void quicksortY2(ArrayList<Point> a, int left, int right) {
 	    int m;
 	    if (left >= right) return;
 	    m = partitionY(a, left, right);
@@ -52,10 +81,11 @@ public class Algorithms {
 	        EXCH(a.get(i),a.get(j));
 	    }
 	    EXCH(a.get(i),a.get(right));
+
 	    return i;
 	}
 	
-	public static void quicksortX(ArrayList<Point> a, int left, int right) {
+	public static void quicksortX2(ArrayList<Point> a, int left, int right) {
 	    int m;
 	    if (left >= right) return;
 	    m = partitionX(a, left, right);
@@ -98,7 +128,7 @@ public class Algorithms {
 	public static boolean LESS(double l, double r) {
 		return l < r;
 	}
-	
+}
 //	public static ArrayList<Point> narrowList(ArrayList<Point>, double x, double y, int zone){
 //		double left = Math.floor(x) - (double) zone;
 //		double right = math.ceil(x) + (double) zone;
@@ -108,6 +138,4 @@ public class Algorithms {
 //		ArrayList<Point> newList = new ArrayList<Point>();
 //		
 //	}
-	
-}
-*/
+

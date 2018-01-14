@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import javax.vecmath.Vector3d;
 
 
@@ -152,7 +151,7 @@ public class CircleGen {
 		ArrayList<Point> closest = new ArrayList<Point>();
 		Algorithms.quicksortY(list1, 0, (list1.size()-1));
 		ArrayList<Point> temp1 = new ArrayList<Point>();
-    	Collections.addAll(temp1, (Point[]) list1.toArray());
+    	Boot.passArrayList(list1, temp1);
     	int size = list1.size();
 		if(outerRing) {
 			if(list1.get(list1.size()/2).getY() <= Test.getY()) {
