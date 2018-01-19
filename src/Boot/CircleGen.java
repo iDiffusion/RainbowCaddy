@@ -1,3 +1,4 @@
+package Boot;
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 /**
@@ -48,7 +49,7 @@ public class CircleGen {
 			nextColor = colors.get(i - 1);
 			radius = (length)*(i/numCircle);
 			circles.add(new Circle(radius, center, spokes, points));	
-			for(Point p : circles.get(i-1).ring) {
+			for(Point p : circles.get(i-1).getCircle()) {
 				p.setRGB((int)nextColor.x, (int)nextColor.y, (int)nextColor.z);
 			}
 			if(i == 1) {
@@ -59,13 +60,13 @@ public class CircleGen {
 			}
 			else if(i == numCircle) {
 				for(Point p : points) {
-					if(!insideRing(p, circles.get(i-1).ring)) {
+					if(!insideRing(p, circles.get(i-1).getCircle())) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)nextColor.z);
 					}
 				}
 			}
 			else {
-				fillRings(points, circles.get(i).ring, circles.get(i-1).ring, numCircle, center);
+				fillRings(points, circles.get(i).getCircle(), circles.get(i-1).getCircle(), numCircle, center);
 			}
 		}
 		

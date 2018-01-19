@@ -1,14 +1,31 @@
+package Boot;
+
 import javax.vecmath.Vector3d;
 /**
  * A point object holds x, y, z values as well as r, g, b values.
- * 
- * @author Keegan Bruer & Tylon Lee
+ * @author Tylon Lee
  */
 public class Point implements Comparable<Point> {
+	
 	double x, y, z;
 	int r, g, b;
+	
 	/**
-	 * create point with x, y, z and black as the color.
+	 * create point with x, y, z and black as default the color.
+	 * @param x
+	 * @param y
+	 */
+	public Point(double x, double y) {
+		this.x = x;
+		this.y = y;
+		this.z = 0.0;
+		r = 0;
+		g = 0;
+		b = 0;
+	}
+	
+	/**
+	 * create point with x, y, z and black as default the color.
 	 * @param x
 	 * @param y
 	 * @param z
@@ -21,6 +38,7 @@ public class Point implements Comparable<Point> {
 		g = 0;
 		b = 0;
 	}
+	
 	/**
 	 * create new point specifying the x, y, z and r, g, b values.
 	 * @param x
@@ -61,8 +79,8 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
-	 * Returns XYZ as Vector3f
-	 * @return - Vector3f of XYZ
+	 * Get the xyz values as a vector array of doubles.
+	 * @return Vector3d xyz
 	 */
 	public Vector3d getXYZ() {
 		return new Vector3d(x, y, z);
@@ -79,15 +97,20 @@ public class Point implements Comparable<Point> {
 		this.g = g;
 		this.b = b;
 	}
+	
 	/**
-	 * get array of RGB values as doubles.
-	 * @return
+	 * get the rgb values as an array of integers.
+	 * @return int[] rgb
 	 */
 	public int[] getRGBAsArray() {
 		int[] rtn = {r, g, b};
 		return rtn;
 	}
 	
+	/**
+	 * get the rgb values as an vector array of doubles.
+	 * @return Vector3d rgb
+	 */
 	public Vector3d getRGB() {
 		return new Vector3d(r, g, b);
 	}
@@ -99,6 +122,7 @@ public class Point implements Comparable<Point> {
 	public void setX(double x) {
 		this.x = x;
 	}
+	
 	/**
 	 * set y position
 	 * @param y
@@ -106,6 +130,7 @@ public class Point implements Comparable<Point> {
 	public void setY(double y) {
 		this.y = y;
 	}
+	
 	/**
 	 * set z position
 	 * @param z
@@ -113,26 +138,40 @@ public class Point implements Comparable<Point> {
 	public void setZ(double z) {
 		this.z = z;
 	}
+	
 	/**
 	 * get x position
-	 * 
+	 * @return x
 	 */
 	public double getX() {
 		return this.x;
 	}
+	
 	/**
 	 * get y position
-	 * 
+	 * @return y
 	 */
 	public double getY() {
 		return this.y;
 	}
+	
 	/**
 	 * get z position
-	 * 
+	 * @return z
 	 */
 	public double getZ() {
 		return this.z;
+	}
+	
+	/**
+	 * Creates a string to represent the point
+	 * @return String containing the point's values
+	 */
+	public String toString() {
+		String Xval = "X = " + this.x + "\n";
+		String Yval = "Y = " + this.y + "\n";
+		String Zval = "Z = " + this.z + "\n";
+		return Xval + Yval + Zval;
 	}
 
 	/**
@@ -142,4 +181,5 @@ public class Point implements Comparable<Point> {
 	public int compareTo(Point p) {
 		return (int) ((int)p.x - (int)this.x);
 	}
+	
 }
