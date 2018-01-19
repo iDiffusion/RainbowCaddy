@@ -1,67 +1,145 @@
-import javax.vecmath.Vector3f;
-
-/**@author Liam Marshall */
+import javax.vecmath.Vector3d;
+/**
+ * A point object holds x, y, z values as well as r, g, b values.
+ * 
+ * @author Keegan Bruer & Tylon Lee
+ */
 public class Point implements Comparable<Point> {
-	public Vector3f xyz;
-	public Vector3f rgb;
-	
-	public Point(double x, double y, double z, double r, double g, double b) {
-		xyz = new Vector3f();
-		rgb = new Vector3f();
-		xyz.x = (float) x;
-		xyz.y = (float) y;
-		xyz.z = (float) z;
-		rgb.x = (float) r;
-		rgb.y = (float) g;
-		rgb.z = (float) b;
+	double x, y, z;
+	int r, g, b;
+	/**
+	 * create point with x, y, z and black as the color.
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public Point(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		r = 0;
+		g = 0;
+		b = 0;
+	}
+	/**
+	 * create new point specifying the x, y, z and r, g, b values.
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
+	public Point(double x, double y, double z, int r, int g, int b) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 	
+	/**
+	 * set XYZ after being created.
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void setXYZ(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	/**
+	 * Get the xyz values as a array of doubles.
+	 * @return
+	 */
+	public double[] getXYZAsArray() {
+		double[] rtn = {x, y, z};
+		return rtn;
+	}
+	
+	/**
+	 * Returns XYZ as Vector3f
+	 * @return - Vector3f of XYZ
+	 */
+	public Vector3d getXYZ() {
+		return new Vector3d(x, y, z);
+	}
+	
+	/**
+	 * set the RGB values after being created.
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
+	public void setRGB(int r, int g, int b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+	/**
+	 * get array of RGB values as doubles.
+	 * @return
+	 */
+	public int[] getRGBAsArray() {
+		int[] rtn = {r, g, b};
+		return rtn;
+	}
+	
+	public Vector3d getRGB() {
+		return new Vector3d(r, g, b);
+	}
+	
+	/**
+	 * set x position
+	 * @param x
+	 */
 	public void setX(double x) {
-		xyz.x = (float) x;
+		this.x = x;
 	}
+	/**
+	 * set y position
+	 * @param y
+	 */
 	public void setY(double y) {
-		xyz.y = (float) y;
+		this.y = y;
 	}
+	/**
+	 * set z position
+	 * @param z
+	 */
 	public void setZ(double z) {
-		xyz.z = (float) z;
+		this.z = z;
 	}
-	public void setR(double r) {
-		rgb.x = (float) r;
+	/**
+	 * get x position
+	 * 
+	 */
+	public double getX() {
+		return this.x;
 	}
-	public void setG(double g) {
-		rgb.y = (float) g;
+	/**
+	 * get y position
+	 * 
+	 */
+	public double getY() {
+		return this.y;
 	}
-	public void setB(double b) {
-		rgb.z = (float) b;
+	/**
+	 * get z position
+	 * 
+	 */
+	public double getZ() {
+		return this.z;
 	}
-	
-	public float getX() {
-		return xyz.x;
-	}
-	public float getY() {
-		return xyz.y;
-	}
-	public float getZ() {
-		return xyz.z;
-	}
-	public float getR() {
-		return rgb.x;
-	}
-	public float getG() {
-		return rgb.y;
-	}
-	public float getB() {
-		return rgb.z;
-	}
-	public Vector3f getXYZ() {
-		return xyz;
-	}
-	public Vector3f getRGB() {
-		return rgb;
-	}
-	
+
+	/**
+	 * used to sort Points in an ArrayList
+	 */
 	@Override
 	public int compareTo(Point p) {
-		return (int)(((this.xyz.y - p.getY() ) * 2) + (this.xyz.x - p.getX())) * 100;
+		return (int) ((int)p.x - (int)this.x);
 	}
 }

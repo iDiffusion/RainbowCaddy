@@ -10,7 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import com.jogamp.opengl.GL2;
-
+/**
+ * @author Keegan Bruer
+ */
 public class Boot {
 	public static Mesh mesh;
 	public static void main(String[] args) {

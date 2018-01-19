@@ -22,7 +22,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 /**
  * Displays Boot.mesh.points Objects
  * 
- * @author Keegan Bruer <br>
+ * @author Tylon Lee & Keegan Bruer
  *
  */
 @SuppressWarnings("serial")
@@ -246,7 +246,7 @@ public class Display extends JFrame implements GLEventListener, MouseListener {
         ArrayList<Point> tempPoints = CircleGen.nearestNeighbor(center, Boot.mesh.points, 1);
         System.out.print(tempPoints.size());
         System.out.println("test");
-        CircleGen.circleGeneration(center, Boot.mesh.points, 360, 5);
+        CircleGen.CircleGeneration(center, Boot.mesh.points, 360, 5);
         System.out.println("Success");
     }
 

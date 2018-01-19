@@ -14,13 +14,15 @@ import com.jogamp.opengl.GL2;
 public class Mesh {
 	ArrayList<Point> points = new ArrayList<Point>();
 	ArrayList<Face> faces = new ArrayList<Face>();
-	double minX = 0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0;
+	double minX = 0.0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0;
+	
 	/**
 	 * Create an empty mesh
 	 */
 	public Mesh() {
 		
 	}
+	
 	/**
 	 * Create a mesh from existing point array
 	 * @param points
@@ -32,6 +34,7 @@ public class Mesh {
 		}
 		findExtremes();
 	}
+	
 	/**
 	 * Create a mesh from existing point ArrayList
 	 * @param points
@@ -60,6 +63,7 @@ public class Mesh {
 			System.out.println("Could Not Read From File");
 		}
 	}
+	
 	/**
 	 * Use this method to generate faces from the meshes array of points.
 	 * Useful for creating a model from a bunch of points.
@@ -85,6 +89,7 @@ public class Mesh {
 			faces.add(new Face(temp.get(i+1), temp.get(i+rowSize), temp.get(i+rowSize+1)));
 		}
 	}
+	
 	/**
 	 * Display The Mesh But Rotate It.
 	 * @param gl - pass the GL2
@@ -105,6 +110,7 @@ public class Mesh {
 		}
 	    DisplayMesh(gl);
 	}
+	
 	/**
 	 * display Mesh without rotating it.
 	 * @param gl
@@ -164,12 +170,9 @@ public class Mesh {
 		}
 		//--------Rotate to be alligned with grid
 		
-		
-		
 		createFaces();
 		
 	}
-	
 	
 	private void readFromFile(File obj) throws Exception {
 		//double largest = findLargest(obj);
@@ -197,7 +200,6 @@ public class Mesh {
     
 	}
 	
-	
 //	private double findLargest(File obj) throws Exception {
 //		double largest = 0;
 //		BufferedReader bufferedReader = new BufferedReader(new FileReader(obj));
@@ -218,6 +220,7 @@ public class Mesh {
 	public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
+	
 	/**
 	 * set the color of every point in the mesh.
 	 * @param r - red
