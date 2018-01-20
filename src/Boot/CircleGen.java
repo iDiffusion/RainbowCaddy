@@ -37,6 +37,7 @@ public class CircleGen {
 				maxY = points.get(i).getY();
 			}
 		}
+		
 		double length;
 		if((maxX - minX)>(maxY - minY)){
 			length = (maxX - minX);
@@ -109,7 +110,7 @@ public class CircleGen {
 		}
 	}
 	
-	/**
+	/**TESTED
 	 * Generates a color based on the outer and inner color passed into the functions
 	 * @param outer
 	 * @param inner
@@ -123,90 +124,86 @@ public class CircleGen {
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
 	}
 	
+	/**TESTED
+	 * 
+	 * @param point
+	 * @param points
+	 * @return
+	 */
 	public static Point nearestNeighbor(Point point, ArrayList<Point> points) {
-		boolean found = false;
-    	boolean xCoords = true;
-    	ArrayList<Point> temp1 = Algorithms.narrowListC(points, point.getX(), point.getY(), (((Math.abs(point.getX()) + Math.abs(point.getY()))/2)/10));
-    	Algorithms.quicksortX(temp1, 0, temp1.size()-1);
-		while(!found) {															/*If nearest neighbor is not found*/
-			if(xCoords) {															/*If looking for x coords*/
-	    		if(temp1.size() == 1) {
-	    			found = true;  
-	    		}
-	    		else if(temp1.size() % 2 == 1) {										/*If Odd*/
-		    		if(point.getX() > temp1.get(temp1.size()/2 + 1).getX()) {				/*if looking for point x is larger*/
-		    			for(int j = 0; j < (temp1.size()/2); j++) {									/*store bigger than median sorted by y in temp*/
-		    				temp1.remove(0);
-		    			}
-		    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
-		    			xCoords = false;
-		    		}
-		    		else if(point.getX() <= temp1.get(temp1.size()/2 + 1).getX()){		/*median smaller than x*/
-		    			for(int j = temp1.size(); j > (temp1.size()/2); j--) {								/*store smaller than median sorted by y in temp*/
-		    				temp1.remove(temp1.size() - 1);
-		    			}
-		    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
-		    			xCoords = false;
-		    		}
-		    	}
-		    	else {																/*even*/
-		    		if(point.getX() > temp1.get(temp1.size()/2).getX()) {				/*x is bigger than median*/
-		    			for(int j = 0; j < (temp1.size()); j++) {									/*store bigger than median sorted by y in temp*/
-		    				temp1.remove(0);
-		    			}
-		    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
-		    			xCoords = false;
-		    		}
-		    		else if(point.getX() <= temp1.get(temp1.size()/2).getX()) {	    	/*x is smaller than median*/
-		    			for(int j = temp1.size(); j > (temp1.size()/2); j--) {								/*store smaller than median sorted by y in temp*/
-		    				temp1.remove(temp1.size() - 1);
-		    			}
-		    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
-		    			xCoords = false;
-		    		}
-	    		}
-	    	}
-	    	else {																/*if y coords*/
-	    		if(temp1.size() % 2 == 1) {											/*If Odd*/
-		    		if(point.getY() > temp1.get(temp1.size()/2 + 1).getY()) {			/*if looking for point y is larger*/
-		    			for(int j = 0; j < (temp1.size()); j++) {									/*store bigger than median sorted by x in temp*/
-		    				temp1.remove(0);
-		    			}
-		    			Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
-		    			xCoords = true;
-		    		}
-		    		else if(point.getY() <= temp1.get(temp1.size()/2 + 1).getY()) {	/*if looking for point y is smaller*/
-		    			/*store smaller than median sorted by x in temp*/
-		    			for(int j = temp1.size(); j > (temp1.size()/2); j--) {
-		    				temp1.remove(temp1.size() - 1);
-		    			}
-		    			Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
-		    			xCoords = true;
-		    		}
-		    	}
-		    	else {																/*even*/
-		    		if(point.getY() > temp1.get(temp1.size()/2).getY()) {				/*y is bigger than median*/
-		    			for(int j = 0; j < (temp1.size()); j++) {									/*store bigger than median sorted by x in temp*/
-		    				temp1.remove(0);
-		    			}
-		    			Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
-		    			xCoords = true;
-		    		}
-		    		else if(point.getY() <= temp1.get(temp1.size()/2).getY()) {		/*y is smaller than median*/
-		    			for(int j = temp1.size(); j > (temp1.size()/2); j--) {							/*store smaller than median sorted by x in temp*/
-		    				temp1.remove(temp1.size() - 1);
-		    			}
-		    			Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
-		    			xCoords = true;
-		    		}
-	    		}
-	    		xCoords = true;									/*look for X coords on next loop*/
-	    	}
+    	boolean xSearch=true;
+    	int size;
+    	ArrayList<Point> temp1 = new ArrayList<Point>();
+    	for(Point p: points) {
+    		temp1.add(p);
     	}
-		int counter = 0;
-		for(Point p : temp1) {
-			System.out.println("XYZ: " + p.getX() + ' ' + p.getY() + ' ' + p.getZ() + "      Point Number: " + counter++);
+    	Algorithms.quicksortX(temp1, 0, temp1.size()-1);
+		while(true) {
+			size = temp1.size();
+			if(xSearch) {
+				if(point.getX() > temp1.get(temp1.size()/2 + 1).getX()) {				/*if looking for point x is larger*/
+	    			for(int j = temp1.size()/2; j >= 0 ; j--) {									/*store bigger than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+				}
+				else if(point.getX() < temp1.get(temp1.size()/2 + 1).getX()){		/*median smaller than x*/
+	    			for(int j = temp1.size()-1; j >= size/2; j--) {								/*store smaller than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+				}
+				else if(point.getX() == temp1.get(temp1.size()/2).getX()){	
+					size = temp1.size();
+					while(point.getX() == temp1.get(size/2).getX()){
+						size--;
+					}
+					for(int j = size-1; j >= size/2; j--) {								/*store smaller than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+				}
+				xSearch=false;
+				Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
+			}
+			else {
+				if(point.getY() > temp1.get(temp1.size()/2).getY()) {			/*if looking for point y is larger*/
+					for(int j = temp1.size()/2; j >= 0 ; j--) {									/*store bigger than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+	    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
+	    		}
+				else if(point.getY() < temp1.get(temp1.size()/2).getY()) {		/*y is smaller than median*/
+					for(int j = temp1.size()-1; j >= (size-1)/2; j--) {								/*store smaller than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+	    		}
+				else if(point.getY() == temp1.get(temp1.size()/2).getY()){	
+					size = temp1.size();
+					while(point.getY() == temp1.get(size/2).getY()){
+						size--;
+					}
+					for(int j = size-1; j >= size/2; j--) {								/*store smaller than median sorted by y in temp*/
+	    				temp1.remove(j);
+	    			}
+				}
+				Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
+				xSearch=true;
+			}
+			if(temp1.size() <= 500) {
+				break;
+			}
 		}
-		return points.get(points.indexOf(temp1.get(0)));
+		Point closest = temp1.get(0);
+		double closestDis = Math.sqrt(Math.pow((temp1.get(0).getX()-point.getX()),2) + Math.pow((temp1.get(0).getY()-point.getY()),2));
+		for(Point p : temp1) {
+			if( closestDis > Math.sqrt(Math.pow((p.getX()-point.getX()),2) + Math.pow((p.getY()-point.getY()),2))) {
+				closestDis = Math.sqrt(Math.pow((p.getX()-point.getX()),2) + Math.pow((p.getY()-point.getY()),2));
+				closest = p;
+			}
+		}
+		for(Point p : points) {
+			if((closest.getX() == p.getX()) && (closest.getY() == p.getY()) && (closest.getZ() == p.getZ())) {
+				return p;
+			}
+		}
+		return null;
 	}
 }

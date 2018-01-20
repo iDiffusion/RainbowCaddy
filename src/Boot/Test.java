@@ -13,20 +13,18 @@ public class Test {
 	public static void main(String args[]) {
 	  	ring = new ArrayList<Point>();
 	  	double tempZ;
-	  	Point center = new Point(8.7,1.8,4.6);
+	  	Point center = new Point(0,0,0);
 	  	Point newPoint = null;
 	  	for(int i= -10; i <= 10; i++) {
 	  		for(int j = -10; j <= 10; j++) {
-	  	  		tempZ = (Math.random()*5 + Math.random()) - (Math.random()*5 + Math.random());
+	  	  		tempZ = 0;
 	  	  		newPoint = new Point(i, j, tempZ);
 	  	  		ring.add(newPoint);
 	  		}
 	  	}
-	  	center = CircleGen.nearestNeighbor(center, ring);
-//		Circle firstRing = new Circle(2, center, 8, ring);
-//	  	for(Point p : firstRing.getCircle()) {
-//	  		System.out.println(p.toString());
-//	  	}
+//	  	center = CircleGen.nearestNeighbor(center, ring);
+		@SuppressWarnings("unused")
+		Circle firstRing = new Circle(1, center, 6, ring);
 	  	System.out.println("Finished");
   }
   
@@ -94,16 +92,18 @@ private static void genColor(Point outer, Point inner, Point color) {
 	}
   
   //TESTED-GOOD
-  public static void makeCircle (Point center, double radius, int numSpokes){
+  public static void makeCircle(Point center, double radius, int numSpokes){
       double deltax,deltay; 
       double degCount=0;
       double degree = (float) 360/numSpokes;
       ring = new ArrayList<Point>();
+      Point tempPoint = null;
       for(degCount=0; degCount<360; degCount+=degree){
           deltax = radius*Math.cos(Math.toRadians(degCount));
           deltay = radius*Math.sin(Math.toRadians(degCount));
-          Point tempPoint = new Point(center.getX() + deltax,center.getY() + deltay, 0.0);
+          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay, 0.0);
           ring.add(tempPoint);
+          tempPoint = null;
       }
   }
   

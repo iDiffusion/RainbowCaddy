@@ -41,17 +41,20 @@ public class Circle {
 	 * @param radius - the distance from the center point
 	 * @param numSpokes - the number of spokes to draw point on
 	 */
-    private void makeCircle (Point center, double radius, int numSpokes){
-        double deltax,deltay; 
-        double degree = (double) 360/numSpokes;
-        ring = new ArrayList<Point>();
-        for(double degCount = 0; degCount < 360; degCount += degree){
-        	deltax = radius * Math.cos(Math.toRadians(degCount));
-            deltay = radius * Math.sin(Math.toRadians(degCount));
-            Point tempPoint = new Point(center.getX() + deltax,center.getY() + deltay);
-            ring.add(tempPoint);
-        }
-    }
+	public void makeCircle(Point center, double radius, int numSpokes){
+	      double deltax,deltay; 
+	      double degCount=0;
+	      double degree = (float) 360/numSpokes;
+	      ring = new ArrayList<Point>();
+	      Point tempPoint = null;
+	      for(degCount=0; degCount<360; degCount+=degree){
+	          deltax = radius*Math.cos(Math.toRadians(degCount));
+	          deltay = radius*Math.sin(Math.toRadians(degCount));
+	          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay);
+	          ring.add(tempPoint);
+	          tempPoint = null;
+	      }
+	  }
     
     /**TESTED
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
