@@ -1,16 +1,18 @@
 package Boot;
-/* Circle.java
- * Date Created: Dec 18, 2017
- * Author: Liam Marshall & Tylon Lee
- * */
 
 import java.util.ArrayList;
+
+/**
+ * Date Created: Dec 18, 2017
+ * @author Liam Marshall 
+ * @author Tylon Lee
+ */
 
 public class Circle {
 	/**
 	 * Holds all the points in a ring
 	 */
-	private ArrayList<Point> ring;
+	public ArrayList<Point> ring;
 	
 	/**
 	 * Use to initialize rings around the center point
@@ -62,11 +64,12 @@ public class Circle {
      * Snaps created points to existing points
      * @param points
      */
-    private void assignHeights(ArrayList<Point> points) {    /** Assign Heights - */
+    private void assignHeights(ArrayList<Point> points) {
     	Point temp;
-        for(int i = 0; i < ring.size(); i++) {                                        /*Nearest Neighbor*/
-            temp = CircleGen.nearestNeighbor(ring.get(i), points);
-            ring.get(i).setXYZ(temp.getX(), temp.getY(), temp.getZ());
+        for(Point p : ring) {
+            temp = CircleGen.nearestNeighbor(p, points);
+            p.setXYZ(temp.getX(), temp.getY(), temp.getZ());
+            temp = null;
         }
     }
     

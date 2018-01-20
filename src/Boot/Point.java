@@ -1,14 +1,29 @@
 package Boot;
 
 import javax.vecmath.Vector3d;
+
 /**
  * A point object holds x, y, z values as well as r, g, b values.
  * @author Tylon Lee
  */
+
 public class Point implements Comparable<Point> {
 	
-	double x, y, z;
-	int r, g, b;
+	private double x, y, z;
+	private int r, g, b;
+	
+	/**
+	 * create point with x, y, z and black as default the color.
+	 * @param p
+	 */
+	public Point(Point p) {
+		this.x = p.getX();
+		this.y = p.getY();
+		this.z = p.getZ();
+		this.r = p.getR();
+		this.g = p.getG();
+		this.b = p.getB();
+	}
 	
 	/**
 	 * create point with x, y, z and black as default the color.
@@ -19,9 +34,9 @@ public class Point implements Comparable<Point> {
 		this.x = x;
 		this.y = y;
 		this.z = 0.0;
-		r = 0;
-		g = 0;
-		b = 0;
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
 	}
 	
 	/**
@@ -34,9 +49,9 @@ public class Point implements Comparable<Point> {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		r = 0;
-		g = 0;
-		b = 0;
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
 	}
 	
 	/**
@@ -70,23 +85,6 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
-	 * Get the xyz values as a array of doubles.
-	 * @return
-	 */
-	public double[] getXYZAsArray() {
-		double[] rtn = {x, y, z};
-		return rtn;
-	}
-	
-	/**
-	 * Get the xyz values as a vector array of doubles.
-	 * @return Vector3d xyz
-	 */
-	public Vector3d getXYZ() {
-		return new Vector3d(x, y, z);
-	}
-	
-	/**
 	 * set the RGB values after being created.
 	 * @param r
 	 * @param g
@@ -99,12 +97,29 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
+	 * Get the xyz values as a array of doubles.
+	 * @return double[] xyz
+	 */
+	public double[] getXYZAsArray() {
+		double[] rtn = {x, y, z};
+		return rtn;
+	}
+	
+	/**
 	 * get the rgb values as an array of integers.
 	 * @return int[] rgb
 	 */
 	public int[] getRGBAsArray() {
 		int[] rtn = {r, g, b};
 		return rtn;
+	}
+	
+	/**
+	 * Get the xyz values as a vector array of doubles.
+	 * @return Vector3d xyz
+	 */
+	public Vector3d getXYZ() {
+		return new Vector3d(x, y, z);
 	}
 	
 	/**
@@ -140,6 +155,30 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
+	 * set r value
+	 * @param r
+	 */
+	public void setR(int r) {
+		this.r = r;
+	}
+	
+	/**
+	 * set g value
+	 * @param g
+	 */
+	public void setG(int g) {
+		this.g = g;
+	}
+	
+	/**
+	 * set b value
+	 * @param b
+	 */
+	public void setB(int b) {
+		this.b = b;
+	}
+	
+	/**
 	 * get x position
 	 * @return x
 	 */
@@ -151,7 +190,7 @@ public class Point implements Comparable<Point> {
 	 * get y position
 	 * @return y
 	 */
-	public double getY() {
+	double getY() {
 		return this.y;
 	}
 	
@@ -164,9 +203,34 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
+	 * get r value
+	 * @return r
+	 */
+	public int getR() {
+		return this.r;
+	}
+	
+	/**
+	 * get g value
+	 * @return g
+	 */
+	public int getG() {
+		return this.g;
+	}
+	
+	/**
+	 * get b value
+	 * @return b
+	 */
+	public int getB() {
+		return this.b;
+	}
+	
+	/**
 	 * Creates a string to represent the point
 	 * @return String containing the point's values
 	 */
+	@Override
 	public String toString() {
 		String Xval = "X = " + this.x + "\n";
 		String Yval = "Y = " + this.y + "\n";

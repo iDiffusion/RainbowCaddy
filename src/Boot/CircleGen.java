@@ -1,13 +1,16 @@
 package Boot;
+
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
+
 /**
 * @author Eli Rhyne
 */
+
 public class CircleGen {
 	public static ArrayList<Vector3d> colors  = new ArrayList<Vector3d>();
 	
-	public static void CircleGen2(Point center, ArrayList<Point> points, int spokes, int numCircle){
+	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
 		colors.add(new Vector3d(0,255,0)); //Green - index 0
 		colors.add(new Vector3d(255,255,0)); //Yellow - index 1
 		colors.add(new Vector3d(255,0,0)); //Red - index 2
@@ -49,27 +52,25 @@ public class CircleGen {
 			nextColor = colors.get(i - 1);
 			radius = (length)*(i/numCircle);
 			circles.add(new Circle(radius, center, spokes, points));	
-			for(Point p : circles.get(i-1).getCircle()) {
+			for(Point p : circles.get(i-1).ring) {
 				p.setRGB((int)nextColor.x, (int)nextColor.y, (int)nextColor.z);
 			}
 			if(i == 1) {
 				for (Point p : points) {
 					p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)nextColor.z);
 				}
-				
 			}
 			else if(i == numCircle) {
 				for(Point p : points) {
-					if(!insideRing(p, circles.get(i-1).getCircle())) {
+					if(!insideRing(p, circles.get(i-1).ring)) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)nextColor.z);
 					}
 				}
 			}
 			else {
-				fillRings(points, circles.get(i).getCircle(), circles.get(i-1).getCircle(), numCircle, center);
+				fillRings(points, circles.get(i).ring, circles.get(i-1).ring, numCircle, center);
 			}
-		}
-		
+		}	
 	}
 
 	public static void fillRings(ArrayList<Point> points, ArrayList<Point> ring1, ArrayList<Point> ring2, int numCircle, Point center) {
@@ -83,6 +84,7 @@ public class CircleGen {
 			}			
 		}
 	}
+	
 	private static boolean insideRing(Point point, ArrayList<Point> ring) { 
 		int count = 0;
 		for(int i = 0; i < ring.size(); i++) {
@@ -107,6 +109,12 @@ public class CircleGen {
 		}
 	}
 	
+	/**
+	 * Generates a color based on the outer and inner color passed into the functions
+	 * @param outer
+	 * @param inner
+	 * @param color
+	 */
 	private static void genColor(Point outer, Point inner, Point color) {
 		double outerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
 		double innerDistance = Math.sqrt((color.getX()-outer.getX())*(color.getX()-outer.getX())  +  (color.getY()-outer.getY()*(color.getY())-outer.getY()) + (color.getZ()-outer.getZ())*(color.getZ()-outer.getZ()));
@@ -199,7 +207,6 @@ public class CircleGen {
 		for(Point p : temp1) {
 			System.out.println("XYZ: " + p.getX() + ' ' + p.getY() + ' ' + p.getZ() + "      Point Number: " + counter++);
 		}
-	
 		return points.get(points.indexOf(temp1.get(0)));
 	}
 }

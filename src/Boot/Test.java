@@ -4,49 +4,36 @@ import java.util.ArrayList;
 
 /**
  * @author Tylon Lee
- *
  */
+
 public class Test {
 
 	public static ArrayList<Point> ring;
 	
-//  public static void main(String args[]) {
-//  	newList = new ArrayList<Point>();
-//  	double tempX, tempY, tempZ;
-//  	for(int i= 0; i < 20; i++) {
-//  		tempX = Math.random()*5 + Math.random();
-//  		tempY = Math.random()*7 + Math.random();
-//  		tempZ = Math.random()*9 + Math.random();
-//  		Point newPoint = new Point(tempX, tempY, tempZ);
-//  		newList.add(newPoint);
-//  	}
-//  	System.out.println("Finished");
-//  }
-	
-  public static void main(String args[]) {
-  	ring = new ArrayList<Point>();
-//  	Point center = new Point(0,0,0);
-//  	makeCircle(center, 1.0, 8);
-//  	pushCircle(center, 1.0, new ArrayList<Point>());
-//  	EXCH(ring.get(0), ring.get(1));
-//  	ring = narrowListC(ring, 2, 0, 0.5);
-//  	for(int i = 0; i < 8; i++) {
-//  		if(i < 4)
-//  			ring.get(i).setRGB(255, 255, 0);
-//  		else
-//  			ring.get(i).setRGB(0, 0, 255);
-//  	}
-//  	genColor(ring.get(0), ring.get(4), center);
-  	
-  	Point test1 = new Point(0.001, 0, 0);
-  	Point test2 = new Point(0.002, 0, 0);
-  	ring=axisList(test1, test2);
-  	System.out.println("Finished");
+	public static void main(String args[]) {
+	  	ring = new ArrayList<Point>();
+	  	double tempZ;
+	  	Point center = new Point(8.7,1.8,4.6);
+	  	Point newPoint = null;
+	  	for(int i= -10; i <= 10; i++) {
+	  		for(int j = -10; j <= 10; j++) {
+	  	  		tempZ = (Math.random()*5 + Math.random()) - (Math.random()*5 + Math.random());
+	  	  		newPoint = new Point(i, j, tempZ);
+	  	  		ring.add(newPoint);
+	  		}
+	  	}
+	  	center = CircleGen.nearestNeighbor(center, ring);
+//		Circle firstRing = new Circle(2, center, 8, ring);
+//	  	for(Point p : firstRing.getCircle()) {
+//	  		System.out.println(p.toString());
+//	  	}
+	  	System.out.println("Finished");
   }
   
 /////////////////////////////////////////////////////////////////////////////////////////
   
-  private static ArrayList<Point> axisList(Point point1, Point point2){
+  @SuppressWarnings("unused")
+private static ArrayList<Point> axisList(Point point1, Point point2){
 	    double dist = .000001;
 	    double distanceBetween = (Math.sqrt(Math.pow(point2.getX()-point1.getX(), 2) + Math.pow(point2.getY() - point1.getY(), 2) + Math.pow(point2.getZ() - point2.getZ(), 2)));
 	    ArrayList<Point> points = new ArrayList<Point>();
@@ -97,19 +84,13 @@ private static void genColor(Point outer, Point inner, Point color) {
   public static void EXCH(Point a, Point b) {
 		Point temp = new Point(a.getX(), a.getY(), a.getZ(), a.getRGBAsArray()[0], a.getRGBAsArray()[1], a.getRGBAsArray()[2]);
 		
-		a.r = b.r;
-		a.g = b.g;
-		a.b = b.b;
-		a.x = b.x;
-		a.y = b.y;
-		a.z = b.z;
+		a.setXYZ(b.getX(), b.getY(), b.getZ());
+		a.setRGB(b.getR(), b.getG(), b.getB());
 		
-		b.r = temp.r;
-		b.g = temp.g;
-		b.b = temp.b;
-		b.x = temp.x;
-		b.y = temp.y;
-		b.z = temp.z;
+		b.setXYZ(temp.getX(), temp.getY(), temp.getZ());
+		b.setRGB(temp.getR(), temp.getG(), temp.getB());
+		
+		temp = null;
 	}
   
   //TESTED-GOOD
