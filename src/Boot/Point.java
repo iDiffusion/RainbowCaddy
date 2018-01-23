@@ -13,7 +13,7 @@ public class Point implements Comparable<Point> {
 	private int r, g, b;
 	
 	/**
-	 * create point with x, y, z and black as default the color.
+	 * create point with x, y, z and set the color.
 	 * @param p
 	 */
 	public Point(Point p) {
@@ -224,6 +224,14 @@ public class Point implements Comparable<Point> {
 	 */
 	public int getB() {
 		return this.b;
+	}
+	
+	/**
+	 * Print a string to represent the point
+	 * @param p used to identify a unique point, contains the address in memory
+	 */
+	public void printPoint(Point p) {
+		System.out.println("Point " + p + ":   " + x + "X   " + y + "Y   " + z + "Z");
 	}
 	
 	/**

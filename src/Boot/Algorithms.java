@@ -6,7 +6,13 @@ import java.util.ArrayList;
  * @author Tylon Lee
  */
 public class Algorithms {
-
+	
+	/**
+	 * Short a list of points based on the Y component
+	 * @param a
+	 * @param left
+	 * @param right
+	 */
 	public static void quicksortY(ArrayList<Point> a, int left, int right) {
 		int m;
 		if (left >= right) return;
@@ -15,7 +21,14 @@ public class Algorithms {
 		quicksortY(a, m + 1, right);
 		return;
 	}
-
+	
+	/**
+	 * Used in conjunction with quicksortY to actually sort the list of component based on Y
+	 * @param a
+	 * @param left
+	 * @param right
+	 * @return
+	 */
 	public static int partitionY(ArrayList<Point> a, int left, int right) {
 		int i = left - 1, j = right;
 		Point p = new Point(a.get(right));
@@ -29,7 +42,13 @@ public class Algorithms {
 		EXCH(a.get(i), a.get(right));
 		return i;
 	}
-
+	
+	/**
+	 * Short a list of points based on the X component
+	 * @param a
+	 * @param left
+	 * @param right
+	 */
 	public static void quicksortX(ArrayList<Point> a, int left, int right) {
 		int m;
 		if (left >= right) return;
@@ -39,6 +58,13 @@ public class Algorithms {
 		return;
 	}
 
+	/**
+	 * Used in conjunction with quicksortX to actually sort the list of component based on X
+	 * @param a
+	 * @param left
+	 * @param right
+	 * @return
+	 */
 	public static int partitionX(ArrayList<Point> a, int left, int right) {
 		int i = left - 1, j = right;
 		Point p = new Point(a.get(right));
@@ -53,7 +79,7 @@ public class Algorithms {
 		return i;
 	}
 
-	/**TESTED
+	/** TESTED
 	 * Swaps the points position in memory by exchanging the point's values
 	 * @param a - holds one point
 	 * @param b - holds the other point

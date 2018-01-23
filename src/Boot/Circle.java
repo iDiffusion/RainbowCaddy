@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * Date Created: Dec 18, 2017
  * @author Liam Marshall 
- * @author Tylon Lee
+ * @author Eli Rhyne
+ * @editor Tylon Lee
  */
 
 public class Circle {

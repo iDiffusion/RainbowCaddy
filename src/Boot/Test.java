@@ -2,126 +2,54 @@ package Boot;
 
 import java.util.ArrayList;
 
-/**
- * @author Tylon Lee
- */
-
 public class Test {
 
-	public static ArrayList<Point> ring;
+	public static ArrayList<Point> points;
 	
 	public static void main(String args[]) {
-	  	ring = new ArrayList<Point>();
-	  	double tempZ;
+	  	points = new ArrayList<Point>();
+	  	int length = 500;
 	  	Point center = new Point(0,0,0);
 	  	Point newPoint = null;
-	  	for(int i= -10; i <= 10; i++) {
-	  		for(int j = -10; j <= 10; j++) {
-	  	  		tempZ = 0;
-	  	  		newPoint = new Point(i, j, tempZ);
-	  	  		ring.add(newPoint);
+	  	for(int i= -(length/2); i <= (length/2); i++) {
+	  		for(int j = -(length/2); j <= (length/2); j++) {
+	  	  		newPoint = new Point(i, j, (i+j)/2);
+	  	  		newPoint.printPoint(newPoint);
+	  	  		points.add(newPoint);
 	  		}
 	  	}
-//	  	center = CircleGen.nearestNeighbor(center, ring);
-		@SuppressWarnings("unused")
-		Circle firstRing = new Circle(1, center, 6, ring);
+	  	CircleGen.circleGeneration(center, points, 8, 3);
 	  	System.out.println("Finished");
-  }
-  
-/////////////////////////////////////////////////////////////////////////////////////////
-  
-  @SuppressWarnings("unused")
-private static ArrayList<Point> axisList(Point point1, Point point2){
-	    double dist = .000001;
-	    double distanceBetween = (Math.sqrt(Math.pow(point2.getX()-point1.getX(), 2) + Math.pow(point2.getY() - point1.getY(), 2) + Math.pow(point2.getZ() - point2.getZ(), 2)));
-	    ArrayList<Point> points = new ArrayList<Point>();
-	    while(dist < distanceBetween) {
-	    	Point temp = new Point(0, 0, 0);
-	        temp.setX(point1.getX() + dist * (Math.sqrt(Math.pow(point2.getX() - point1.getX(), 2))));
-	        temp.setY(point1.getY() + dist * (Math.sqrt(Math.pow(point2.getY() - point1.getY(), 2))));
-	        temp.setZ(point1.getZ() + dist * (Math.sqrt(Math.pow(point2.getZ() - point2.getZ(), 2))));
-	        dist+=0.000001;
-	        points.add(temp);
-	    }
-	    return points;
 	}
-  
-@SuppressWarnings("unused")
-private static void genColor(Point outer, Point inner, Point color) {
-		double outerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
-		double innerDistance = Math.sqrt((color.getX()-outer.getX())*(color.getX()-outer.getX())  +  (color.getY()-outer.getY()*(color.getY())-outer.getY()) + (color.getZ()-outer.getZ())*(color.getZ()-outer.getZ()));
-		double outerPercent = outerDistance/(innerDistance+outerDistance);
-		double innerPercent = innerDistance/(innerDistance+outerDistance);
-		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
-	}
-  
-  //TESTED-GOOD
-  public static ArrayList<Point> narrowListC(ArrayList<Point> points, double x, double y, double accuracy){
-		double left = Math.floor(x) - Math.abs(accuracy);
-		double right = Math.ceil(x) + Math.abs(accuracy);
-		double up = Math.ceil(y) + Math.abs(accuracy);
-		double down = Math.floor(y) - Math.abs(accuracy);
-		
+
+	/**
+	 * Creates a new list of points with values around the desired point
+	 * @param points is a list of points provided by the caller
+	 * @param x is the desired x value
+	 * @param y is the desired y value
+	 * @param percent
+	 * @return a new list of points near the desired point
+	 */
+  	public static ArrayList<Point> narrowListC(ArrayList<Point> points, Point point, int percent){      
+	    int size = 0;
+	    double totalX = 0;
+	    double totalY = 0;
+	    double removeX;
+	    double removeY;
 		ArrayList<Point> newList = new ArrayList<Point>();
-		
-		for(Point p : points) {
-			if((p.getX() > left && p.getX() < right) && (p.getY() > down && p.getY() < up)) {
-				newList.add(p);
-			}
-			else {
-				continue;
-			}
-		}
-		while(newList.isEmpty()) {
-			newList = narrowListC(points, x, y, ++accuracy);
-		}
-		return newList;
+	    for(Point p : points) {
+	        size++;
+	        totalX =+ p.getX();
+	        totalY =+ p.getY();
+	    }
+	    removeX=(totalX/size)*(percent/200);
+	    removeY=(totalY/size)*(percent/200);
+	    for(Point p: points) {
+	    	if(((((point.getX())-((totalX/size)*(100-(percent/200)))) <= p.getX())&&(((point.getX())+((totalX/size)*(100-(percent/200)))) <= p.getX()))&&((((point.getY())-((totalY/size)*(100-(percent/200)))) <= p.getY())&&(((point.getY())+((totalY/size)*(100-(percent/200)))) <= p.getY()))){
+	    		newList.add(p);
+	    	}
+	    }
+	    return newList;
 	}
-  
-  //TESTED-GOOD
-  public static void EXCH(Point a, Point b) {
-		Point temp = new Point(a.getX(), a.getY(), a.getZ(), a.getRGBAsArray()[0], a.getRGBAsArray()[1], a.getRGBAsArray()[2]);
-		
-		a.setXYZ(b.getX(), b.getY(), b.getZ());
-		a.setRGB(b.getR(), b.getG(), b.getB());
-		
-		b.setXYZ(temp.getX(), temp.getY(), temp.getZ());
-		b.setRGB(temp.getR(), temp.getG(), temp.getB());
-		
-		temp = null;
-	}
-  
-  //TESTED-GOOD
-  public static void makeCircle(Point center, double radius, int numSpokes){
-      double deltax,deltay; 
-      double degCount=0;
-      double degree = (float) 360/numSpokes;
-      ring = new ArrayList<Point>();
-      Point tempPoint = null;
-      for(degCount=0; degCount<360; degCount+=degree){
-          deltax = radius*Math.cos(Math.toRadians(degCount));
-          deltay = radius*Math.sin(Math.toRadians(degCount));
-          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay, 0.0);
-          ring.add(tempPoint);
-          tempPoint = null;
-      }
-  }
-  
-  //TESTED-GOOD
-  public static void pushCircle (Point center, double radius, ArrayList<Point> points){
-      int count;
-      double deltaz;
-      int numSpokes = ring.size();
-      for(count=0; count<numSpokes; count++){
-          deltaz = center.getZ() - ring.get(count).getZ();
-          ring.get(count).setX(ring.get(count).getX() + deltaz * coeff() * ((ring.get(count).getX() - center.getX()) / radius));
-          ring.get(count).setY(ring.get(count).getY() + deltaz * coeff() * ((ring.get(count).getY() - center.getY()) / radius));
-      }
-      //assignHeights(points);
-  }
-  
-  //TESTED-GOOD
-  public static double coeff(){
-      return 1.0;
-  }
+  	
 }
