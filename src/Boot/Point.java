@@ -4,6 +4,7 @@ import javax.vecmath.Vector3d;
 
 /**
  * A point object holds x, y, z values as well as r, g, b values.
+ * @author Keegan Bruer
  * @author Tylon Lee
  */
 
