@@ -11,18 +11,23 @@ import java.util.ArrayList;
 
 public class Circle {
 	/**
-	 * Holds all the points in a ring
+	 * Holds all the points in a circle
 	 */
-	public ArrayList<Point> ring;
+	private ArrayList<Point> ring;
 	
 	/**
+	 * Holds all the points that make up a bound
+	 */
+	private static ArrayList<Point> bounds;
+	
+	/** TESTED
 	 * Use to initialize rings around the center point
 	 * @param radius - the distance from the center point
 	 * @param center - contains the X,Y,Z points of the center
 	 * @param numSpokes - the number of spokes to draw points on
 	 * @param points - a list of the object files points
 	 */
-	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points) {
+	Circle(double radius, Point center, int numSpokes, ArrayList<Point> points) {
 		makeCircle(center,radius,numSpokes);
 		assignHeights(points);
 		pushCircle(center, radius);
@@ -32,7 +37,7 @@ public class Circle {
 	/**TESTED
 	 * @return a list of points that make up the ring
 	 */
-	public ArrayList<Point> getCircle(){
+	protected ArrayList<Point> getCircle(){
         return ring;
     }
 	
@@ -42,7 +47,7 @@ public class Circle {
 	 * @param radius - the distance from the center point
 	 * @param numSpokes - the number of spokes to draw point on
 	 */
-	public void makeCircle(Point center, double radius, int numSpokes){
+	private void makeCircle(Point center, double radius, int numSpokes){
 	      double deltax,deltay; 
 	      double degCount=0;
 	      double degree = (float) 360/numSpokes;

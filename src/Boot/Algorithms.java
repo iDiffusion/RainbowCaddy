@@ -116,7 +116,8 @@ public class Algorithms {
 		for (Point p : points) {
 			if ((p.getX() > left && p.getX() < right) && (p.getY() > down && p.getY() < up)) {
 				newList.add(p);
-			} else {
+			} 
+			else {
 				continue;
 			}
 		}

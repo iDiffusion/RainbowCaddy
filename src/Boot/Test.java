@@ -14,7 +14,7 @@ public class Test {
 	  	for(int i= -(length/2); i <= (length/2); i++) {
 	  		for(int j = -(length/2); j <= (length/2); j++) {
 	  	  		newPoint = new Point(i, j, (i+j)/2);
-	  	  		newPoint.printPoint(newPoint);
+	  	  		System.out.print(newPoint.toString());
 	  	  		points.add(newPoint);
 	  		}
 	  	}
@@ -34,16 +34,12 @@ public class Test {
 	    int size = 0;
 	    double totalX = 0;
 	    double totalY = 0;
-	    double removeX;
-	    double removeY;
 		ArrayList<Point> newList = new ArrayList<Point>();
 	    for(Point p : points) {
 	        size++;
 	        totalX =+ p.getX();
 	        totalY =+ p.getY();
 	    }
-	    removeX=(totalX/size)*(percent/200);
-	    removeY=(totalY/size)*(percent/200);
 	    for(Point p: points) {
 	    	if(((((point.getX())-((totalX/size)*(100-(percent/200)))) <= p.getX())&&(((point.getX())+((totalX/size)*(100-(percent/200)))) <= p.getX()))&&((((point.getY())-((totalY/size)*(100-(percent/200)))) <= p.getY())&&(((point.getY())+((totalY/size)*(100-(percent/200)))) <= p.getY()))){
 	    		newList.add(p);

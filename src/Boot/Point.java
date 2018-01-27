@@ -227,23 +227,16 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
-	 * Print a string to represent the point
-	 * @param p used to identify a unique point, contains the address in memory
-	 */
-	public void printPoint(Point p) {
-		System.out.println("Point " + p + ":   " + x + "X   " + y + "Y   " + z + "Z");
-	}
-	
-	/**
 	 * Creates a string to represent the point
 	 * @return String containing the point's values
 	 */
 	@Override
 	public String toString() {
-		String Xval = "X = " + this.x + "\n";
-		String Yval = "Y = " + this.y + "\n";
-		String Zval = "Z = " + this.z + "\n";
-		return Xval + Yval + Zval;
+		String thePoint = "Point[" + getClass().hashCode() + "]:";
+		String xValue = this.x + "X";
+		String yValue = this.y + "Y";
+		String zValue = this.z + "Z";
+		return (thePoint + "   " + xValue + "    " + yValue + "   " + zValue + "\n");
 	}
 
 	/**

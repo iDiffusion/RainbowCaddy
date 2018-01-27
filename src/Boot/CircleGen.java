@@ -1,5 +1,6 @@
 package Boot;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 
@@ -57,25 +58,25 @@ public class CircleGen {
 		for(int i = 1; i <= numCircle; i++) {
 			radius = (((double)length)*((double)i/(double)numCircle));
 			circles.add(new Circle(radius, center, spokes, points));	
-			for(Point p : circles.get(i-1).ring) {
+			for(Point p : circles.get(i-1).getCircle()) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 			}
 			if(i == 1) {
 				for (Point p : points) {
-					if(insideRing(p,circles.get(i-1).ring)){
+					if(insideRing(p,circles.get(i-1).getCircle())){
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 					}
 				}
 			}
 			else if(i == numCircle) {
 				for(Point p : points) {
-					if(!insideRing(p, circles.get(i-1).ring)) {
+					if(!insideRing(p, circles.get(i-1).getCircle())) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 					}
 				}
 			}
 			else {
-				fillRings(points, circles.get(i).ring, circles.get(i-1).ring);
+				fillRings(points, circles.get(i).getCircle(), circles.get(i-1).getCircle());
 			}
 		}	
 	}
