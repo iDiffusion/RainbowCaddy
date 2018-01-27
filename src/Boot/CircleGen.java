@@ -1,34 +1,30 @@
 package Boot;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 
-import org.lwjgl.util.Color;
-
 /**
- * Date Created: Dec 18, 2017
  * @author Eli Rhyne
- * @author Liam Marshall 
  */
 
 public class CircleGen {
-	public static ArrayList<Vector3d> colors  = new ArrayList<Vector3d>();
-	
+	public static ArrayList<Vector3d> colors = new ArrayList<Vector3d>();
+
 	/**
-	 * @return Generates circles and fills in the colors based on change in elevation
-	 * @param center - Center of the rings to be created
-	 * @param points - ArrayList of all the points in the mesh to be colored
-	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
-	 * @param numCircle - Number of circle to make 
+	 * 
+	 * @param center
+	 * @param points
+	 * @param spokes
+	 * @param numCircle
 	 */
 	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
-		if(colors.isEmpty()) {
-			colors.add(new Vector3d(1,255,1)); //Green - index 0
-			colors.add(new Vector3d(255,255,1)); //Yellow - index 1
-			colors.add(new Vector3d(255,1,1)); //Red - index 2
-			colors.add(new Vector3d(1,1,255)); //Blue - index 3
-			colors.add(new Vector3d(255,69,1)); //Orange - index 4
-			colors.add(new Vector3d(255,255,255)); //White - index 5
-		}
+		colors.add(new Vector3d(0,255,0)); //Green - index 0
+		colors.add(new Vector3d(255,255,0)); //Yellow - index 1
+		colors.add(new Vector3d(255,0,0)); //Red - index 2
+		colors.add(new Vector3d(0,0,255)); //Blue - index 3
+		colors.add(new Vector3d(255,69,0)); //Orange - index 4
+		colors.add(new Vector3d(255,255,255)); //White - index 5
 		
 		Point point = new Point(points.get(0).getX(), points.get(0).getY(), points.get(0).getZ());
 		double minX = point.getX();
@@ -56,39 +52,40 @@ public class CircleGen {
 		else {
 			length = (maxY - minY);
 		}
-
+		
+		double radius;
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 1; i <= numCircle; i++) {
-			double radius = (((double)length)*((double)i/(double)numCircle));
+			radius = (((double)length)*((double)i/(double)numCircle));
 			circles.add(new Circle(radius, center, spokes, points));	
-			for(Point p : circles.get(i-1).ring) {
+			for(Point p : circles.get(i-1).getCircle()) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 			}
 			if(i == 1) {
 				for (Point p : points) {
-					if(insideRing(p,circles.get(i-1).ring)){
+					if(insideRing(p,circles.get(i-1).getCircle())){
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 					}
 				}
 			}
 			else if(i == numCircle) {
 				for(Point p : points) {
-					if(!insideRing(p, circles.get(i-1).ring)) {
+					if(!insideRing(p, circles.get(i-1).getCircle())) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 					}
 				}
 			}
 			else {
-				fillRings(points, circles.get(i-1).ring, circles.get(i-2).ring);
+				fillRings(points, circles.get(i).getCircle(), circles.get(i-1).getCircle());
 			}
-		}
-		System.out.println("Finished");
+		}	
 	}
+
 	/**
-	 * @return Fills the rgb values of the points between the rings based on the color of the rings
-	 * @param points - ArrayList of all points
-	 * @param ring1 - ArrayList of the outer ring
-	 * @param ring2 - ArrayList of the inner ring
+	 * 
+	 * @param points
+	 * @param ring1
+	 * @param ring2
 	 */
 	public static void fillRings(ArrayList<Point> points, ArrayList<Point> ring1, ArrayList<Point> ring2) {
 		Point outerRing;
@@ -101,27 +98,25 @@ public class CircleGen {
 			}			
 		}
 	}
+	
 	/**
 	 * 
-	 * @param point - Point to be tested
-	 * @param ring - Ring that the point is relative to
-	 * @return Returns 1 if a point is inside of a ring, and 0 if it is outside
+	 * @param point
+	 * @param ring
+	 * @return
 	 */
 	private static boolean insideRing(Point point, ArrayList<Point> ring) { 
 		int count = 0;
-		int item;
 		for(int i = 0; i < ring.size(); i++) {
-			item = ((i+1) == ring.size()) ? 0 : i+1;
-			if((ring.get(item).getX()>point.getX())&&(ring.get(i).getX()>point.getX())) {
-				if(ring.get(i).getY() > ring.get(item).getY()) {  // if slant down
-					if(((ring.get(item).getY() <= point.getY()) && (ring.get(i).getY() >= point.getY()))) {
-						count++;
-					}
+			int item = i+1 == ring.size() ? 0 : i + 1;
+			if(ring.get(i).getY() > ring.get(item).getY()) {  // if slant down
+				if(((ring.get(item).getY() <= point.getY()) && (ring.get(i).getY() >= point.getY()))) {
+					count++;
 				}
-				if(ring.get(i).getY() < ring.get(item).getY()) { //if slant up
-					if(((ring.get(item).getY() >= point.getY()) && (ring.get(i).getY() <= point.getY()))) {
-						count++;
-					}
+			}
+			else if(ring.get(i).getY() < ring.get(item).getY()) { //if slant up
+				if(((ring.get(item).getY() >= point.getY()) && (ring.get(i).getY() <= point.getY()))) {
+					count++;
 				}
 			}
 		}
@@ -132,11 +127,12 @@ public class CircleGen {
 			return false;
 		}
 	}
+	
 	/**
-	 * @return Generates a color proportional to the distance of the point to the inner and outer rings
-	 * @param outer - Outer Ring Point
-	 * @param inner - Inner Ring Point
-	 * @param color - Point to be colored
+	 * 
+	 * @param outer
+	 * @param inner
+	 * @param color
 	 */
 	private static void genColor(Point outer, Point inner, Point color) {
 		double outerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
@@ -145,21 +141,92 @@ public class CircleGen {
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
 	}
+	
 	/**
 	 * 
-	 * @param point - Point to be looked for
-	 * @param points - Array to look for it in
-	 * @return - The point in the array that is closest to the point looking for
+	 * @param point
+	 * @param points
+	 * @return
 	 */
     public static Point nearestNeighbor(Point point, ArrayList<Point> points) {
-		Point closest = points.get(0);
-		double closestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
-		for(Point p : points) {
-			if( closestDis >= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())))) {
-				closestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())));
+    	boolean xSearch=true;
+    	int size;
+    	ArrayList<Point> temp1 = new ArrayList<Point>();
+    	if(points.size() > 500) {
+    		temp1 = Test.narrowListC(points, point, 25);
+	    	Algorithms.quicksortX(temp1, 0, temp1.size()-1);
+			while(true) {
+				size = temp1.size();
+				if(xSearch) {
+					if(point.getX() > temp1.get(temp1.size()/2 + 1).getX()) {				/*if looking for point x is larger*/
+		    			for(int j = (temp1.size()-1)/2; j >= 0 ; j--) {									/*store bigger than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+					}
+					else if(point.getX() < temp1.get(temp1.size()/2 + 1).getX()){		/*median smaller than x*/
+		    			for(int j = temp1.size()-1; j >= (size+1)/2; j--) {								/*store smaller than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+					}
+					else if(point.getX() == temp1.get(temp1.size()/2).getX()){	
+						size = temp1.size();
+						while((point.getY() == temp1.get(size/2).getY()) && (point.getX() == temp1.get(size/2).getX())){
+							size--;
+						}
+						for(int j = 0; j <= size+1; j++) {								/*store smaller than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+					}
+					xSearch=false;
+					Algorithms.quicksortY(temp1, 0, (temp1.size()-1));
+				}
+				else {
+					if(point.getY() > temp1.get(temp1.size()/2).getY()) {			/*if looking for point y is larger*/
+						for(int j = (temp1.size()-1)/2; j >= 0 ; j--) {									/*store bigger than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+		    			Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
+		    		}
+					else if(point.getY() < temp1.get(temp1.size()/2).getY()) {		/*y is smaller than median*/
+						for(int j = temp1.size()-1; j >= (size+1)/2; j--) {								/*store smaller than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+		    		}
+					else if(point.getY() == temp1.get(temp1.size()/2).getY()){	
+						size = temp1.size();
+						while((point.getY() == temp1.get(size/2).getY()) && (point.getX() == temp1.get(size/2).getX())){
+							size--;
+						}
+						for(int j = 0; j <= size+1; j++) {								/*store smaller than median sorted by y in temp*/
+		    				temp1.remove(j);
+		    			}
+					}
+					Algorithms.quicksortX(temp1, 0, (temp1.size()-1));
+					xSearch=true;
+				}
+				if(temp1.size() <= 500) {
+					break;
+				}
+			}
+    	}
+    	else {
+    		for(Point p: points) {
+    			temp1.add(p);
+    		}
+    	}
+		Point closest = temp1.get(0);
+		double closestDis = Math.sqrt(Math.pow((temp1.get(0).getX()-point.getX()),2) + Math.pow((temp1.get(0).getY()-point.getY()),2));
+		for(Point p : temp1) {
+			if( closestDis >= Math.sqrt(Math.pow((p.getX()-point.getX()),2) + Math.pow((p.getY()-point.getY()),2))) {
+				closestDis = Math.sqrt(Math.pow((p.getX()-point.getX()),2) + Math.pow((p.getY()-point.getY()),2));
 				closest = p;
 			}
 		}
-		return closest;
+		for(Point p : points) {
+			if((closest.getX() == p.getX()) && (closest.getY() == p.getY()) && (closest.getZ() == p.getZ())) {
+				return p;
+			}
+		}
+		return null;
 	}
 }

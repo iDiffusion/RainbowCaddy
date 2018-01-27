@@ -4,14 +4,13 @@ import javax.vecmath.Vector3d;
 
 /**
  * A point object holds x, y, z values as well as r, g, b values.
- * @author Keegan Bruer
  * @author Tylon Lee
  */
 
 public class Point implements Comparable<Point> {
 	
-	public double x, y, z;
-	public int r, g, b;
+	private double x, y, z;
+	private int r, g, b;
 	
 	/**
 	 * create point with x, y, z and set the color.
