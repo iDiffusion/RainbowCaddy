@@ -1,11 +1,9 @@
 package GLEngine;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,9 +111,9 @@ public class OBJLoader {
 		pop.appendText("\n - Loading Original Colors");
 		int colorIndex = 0;
 		for (int i = 0; i < verticesArray.length; i+=3) {
-			colorArray[i] = mesh.points.get(colorIndex).r;
-			colorArray[i+1] = mesh.points.get(colorIndex).g;
-			colorArray[i+2] = mesh.points.get(colorIndex).b;
+			colorArray[i] = mesh.points.get(colorIndex).getR();
+			colorArray[i+1] = mesh.points.get(colorIndex).getG();
+			colorArray[i+2] = mesh.points.get(colorIndex).getB();
 			colorIndex++;
 		}
 		pop.appendText("\n - Finished Loading Original Colors");
@@ -123,14 +121,13 @@ public class OBJLoader {
 	}
 	
 	public RawModel updateColors(Mesh mesh, Loader loader, Error_Popup pop) {
-		double time = System.currentTimeMillis();
 		System.out.println("Loading New Colors");
 		pop.appendText("\n - Loading New Colors");
 		int colorIndex = 0;
 		for (int i = 0; i < verticesArray.length; i+=3) {
-			colorArray[i] = mesh.points.get(colorIndex).r;
-			colorArray[i+1] = mesh.points.get(colorIndex).g;
-			colorArray[i+2] = mesh.points.get(colorIndex).b;
+			colorArray[i] = mesh.points.get(colorIndex).getR();
+			colorArray[i+1] = mesh.points.get(colorIndex).getG();
+			colorArray[i+2] = mesh.points.get(colorIndex).getB();
 			colorIndex++;
 		}		
 		return loader.loadToVao(verticesArray, textureArray, normalsArray, indicesArray, colorArray, vertices);

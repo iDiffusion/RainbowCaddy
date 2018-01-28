@@ -109,22 +109,21 @@ public class Boot {
 		mesh.setColor(0, 0, 0); //Set Color of mesh
 		//TODO Generate circles and load to Mesh object
 		if (mousePicker != null) {
-			float smallestDistance = 1000000;
-			Point closestPoint = null;
+			double err = 10;
+			//-----------------------GET THE POINTS OF THE RAY ON THE MESH------
+			double x = Boot.map(mousePicker.getCurrentRay().getX(), -.5, 0.5, mesh.minX, mesh.maxX);
+			double y = Boot.map(mousePicker.getCurrentRay().getY(), -.5, .5, mesh.minY, mesh.maxY);
+			
+			//------ADJUST THOSE POINTS (TEMP FIX)-----------
+			x -= 3;
+			y += 5;
+			
+			System.out.println(mesh.minX + " " + mesh.maxX);
+			System.out.println(mousePicker.getCurrentRay().getX() + "  " + mousePicker.getCurrentRay().getY()  + "    " +x + "   " + y);
 			for (Point p : mesh.points) {
-				Vector3f point = new Vector3f((float)p.getX(), (float)p.getY(), (float)p.getZ());
-				float distance = mousePicker.distanceToPoint(point);
-				if (distance < smallestDistance) {
-					smallestDistance = distance;
-					closestPoint = p;
-				}
-			}
-			System.out.printf("Point: %f : %f : %f \n", closestPoint.getX(), closestPoint.getY(), closestPoint.getZ());
-			for (Point p : mesh.points) {
-				if (p.getX() > closestPoint.getX()-5 && p.getX() < closestPoint.getX()+5 && p.getY() > closestPoint.getY()-5 && p.getY() < closestPoint.getY()+5) {
+				if (p.getX() > x - err && p.getX() < x + err &&
+					p.getY() > y - err && p.getY() < y + err) {
 					p.setR(255);
-					p.setG(0);
-					p.setB(255);
 				}
 			}
 		}
