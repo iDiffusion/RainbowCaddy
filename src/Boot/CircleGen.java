@@ -2,8 +2,6 @@ package Boot;
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 
-import org.lwjgl.util.Color;
-
 /**
  * Date Created: Dec 18, 2017
  * @author Eli Rhyne
@@ -21,45 +19,19 @@ public class CircleGen {
 	 * @param numCircle - Number of circle to make 
 	 */
 	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
-		if(colors.isEmpty()) {
-			colors.add(new Vector3d(1,255,1)); //Green - index 0
-			colors.add(new Vector3d(255,255,1)); //Yellow - index 1
-			colors.add(new Vector3d(255,1,1)); //Red - index 2
-			colors.add(new Vector3d(1,1,255)); //Blue - index 3
-			colors.add(new Vector3d(255,69,1)); //Orange - index 4
-			colors.add(new Vector3d(255,255,255)); //White - index 5
-		}
+		colors.add(new Vector3d(1,255,1)); //Green - index 0
+		colors.add(new Vector3d(255,255,1)); //Yellow - index 1
+		colors.add(new Vector3d(255,1,1)); //Red - index 2
+		colors.add(new Vector3d(1,1,255)); //Blue - index 3
+		colors.add(new Vector3d(255,69,1)); //Orange - index 4
+		colors.add(new Vector3d(255,255,255)); //White - index 5
 		
 		Point point = new Point(points.get(0).getX(), points.get(0).getY(), points.get(0).getZ());
-		double minX = point.getX();
-		double minY = point.getY();
-		double maxX = point.getX();
-		double maxY = point.getY();
-		for(int i = 0; i < points.size(); i++) {
-			if(minX > points.get(i).getX()) {
-				minX = points.get(i).getX();
-			}
-			else if(maxX < points.get(i).getX()) {
-				maxX = points.get(i).getX();
-			}
-			else if(minY > points.get(i).getY()) {
-				minY = points.get(i).getY();
-			}
-			else if(maxY < points.get(i).getY()) {
-				maxY = points.get(i).getY();
-			}
-		}
-		double length;
-		if((maxX - minX)>(maxY - minY)){
-			length = (maxX - minX);
-		}
-		else {
-			length = (maxY - minY);
-		}
-
+		
+		double radius = 0;
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 1; i <= numCircle; i++) {
-			double radius = (((double)length)*((double)i/(double)numCircle));
+			radius+=5;
 			circles.add(new Circle(radius, center, spokes, points));	
 			for(Point p : circles.get(i-1).ring) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
@@ -68,6 +40,7 @@ public class CircleGen {
 				for (Point p : points) {
 					if(insideRing(p,circles.get(i-1).ring)){
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
+						System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");
 					}
 				}
 			}
@@ -75,6 +48,7 @@ public class CircleGen {
 				for(Point p : points) {
 					if(!insideRing(p, circles.get(i-1).ring)) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
+						System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");	
 					}
 				}
 			}
@@ -82,7 +56,7 @@ public class CircleGen {
 				fillRings(points, circles.get(i-1).ring, circles.get(i-2).ring);
 			}
 		}
-		System.out.println("Finished");
+		System.out.print("Finished");
 	}
 	/**
 	 * @return Fills the rgb values of the points between the rings based on the color of the rings
@@ -97,6 +71,8 @@ public class CircleGen {
 			if(insideRing(p, ring1) && !insideRing(p, ring2)){
 				outerRing = nearestNeighbor(p, ring1);
 				innerRing = nearestNeighbor(p, ring2);
+				outerRing.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
+				innerRing.setRGB(ring2.get(0).getR(), ring2.get(0).getG(), ring2.get(0).getB());
 				genColor(outerRing, innerRing, p);
 			}			
 		}
@@ -140,10 +116,11 @@ public class CircleGen {
 	 */
 	private static void genColor(Point outer, Point inner, Point color) {
 		double outerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
-		double innerDistance = Math.sqrt((color.getX()-outer.getX())*(color.getX()-outer.getX())  +  (color.getY()-outer.getY()*(color.getY())-outer.getY()) + (color.getZ()-outer.getZ())*(color.getZ()-outer.getZ()));
+		double innerDistance = Math.sqrt((inner.getX()-color.getX())*(inner.getX()-color.getX())  +  (inner.getY()-color.getY())*(inner.getY()-color.getY()) + (inner.getZ()-color.getZ())*(inner.getZ()-color.getZ()));
 		double outerPercent = outerDistance/(innerDistance+outerDistance);
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
+		System.out.print(color.getR()+" "+color.getG()+" "+color.getB()+"\n");
 	}
 	/**
 	 * 
