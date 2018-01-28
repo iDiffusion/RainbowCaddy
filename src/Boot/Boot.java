@@ -112,19 +112,19 @@ public class Boot {
 			float smallestDistance = 1000000;
 			Point closestPoint = null;
 			for (Point p : mesh.points) {
-				Vector3f point = new Vector3f((float)p.x, (float)p.y, (float)p.z);
+				Vector3f point = new Vector3f((float)p.getX(), (float)p.getY(), (float)p.getZ());
 				float distance = mousePicker.distanceToPoint(point);
 				if (distance < smallestDistance) {
 					smallestDistance = distance;
 					closestPoint = p;
 				}
 			}
-			System.out.printf("Point: %f : %f : %f \n", closestPoint.x, closestPoint.y, closestPoint.z);
+			System.out.printf("Point: %f : %f : %f \n", closestPoint.getX(), closestPoint.getY(), closestPoint.getZ());
 			for (Point p : mesh.points) {
-				if (p.x > closestPoint.x-5 && p.x < closestPoint.x+5 && p.y > closestPoint.y-5 && p.y < closestPoint.y+5) {
-					p.r = 255;
-					p.g = 0;
-					p.b = 255;
+				if (p.getX() > closestPoint.getX()-5 && p.getX() < closestPoint.getX()+5 && p.getY() > closestPoint.getY()-5 && p.getY() < closestPoint.getY()+5) {
+					p.setR(255);
+					p.setG(0);
+					p.setB(255);
 				}
 			}
 		}
@@ -150,7 +150,6 @@ public class Boot {
 		frame.getContentPane().setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
-        int lastX = 0;
         //---------------ADD BUTTONS TO FRAME----------------
 		JButton refreshBtn = new JButton("Refresh");
 		refreshBtn.setBounds(10, frame.getHeight()/2-81, 100, 23);

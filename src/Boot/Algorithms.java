@@ -51,19 +51,19 @@ public class Algorithms {
 	public static void EXCH(Point a, Point b) {
 		Point temp = new Point(a.getX(), a.getY(), a.getZ(), a.getRGBAsArray()[0], a.getRGBAsArray()[1], a.getRGBAsArray()[2]);
 		
-		a.r = b.r;
-		a.g = b.g;
-		a.b = b.b;
-		a.x = b.x;
-		a.y = b.y;
-		a.z = b.z;
+		a.setR(b.getR());
+		a.setG(b.getG());
+		a.setB(b.getB());
+		a.setX(b.getX());
+		a.setY(b.getY());
+		a.setZ(b.getZ());
 		
-		b.r = temp.r;
-		b.g = temp.g;
-		b.b = temp.b;
-		b.x = temp.x;
-		b.y = temp.y;
-		b.z = temp.z;
+		b.setR(temp.getR());
+		b.setG(temp.getG());
+		b.setB(temp.getB());
+		b.setX(temp.getX());
+		b.setY(temp.getY());
+		b.setZ(temp.getZ());
 	}
 	
 	public static boolean LESS(double l, double r) {

@@ -69,9 +69,9 @@ public class Mesh {
 		int rowSize = 0;
 		for (Point p : temp) {
 			if (lastY == -10000) {
-				lastY = (int)p.y;
+				lastY = (int)p.getY();
 			}
-			if ((int)p.y == lastY) {
+			if ((int)p.getY() == lastY) {
 				rowSize++;
 			}
 		}
@@ -83,8 +83,8 @@ public class Mesh {
 	
 	public void moveMesh(double x, double y) {
 		for(int i = 0; i < points.size(); i++) {
-			points.get(i).x += x;
-			points.get(i).y += y;
+			points.get(i).setX(x + points.get(i).getX());
+			points.get(i).setY(y + points.get(i).getY());
 		}
 	}
 	
@@ -140,25 +140,25 @@ public class Mesh {
 	 */
 	public void setColor(int r, int g, int b) {
 		for (Point p : points) {
-			p.r = r;
-			p.g = g;
-			p.b = b;
+			p.setR(r);
+			p.setG(g);
+			p.setB(b);
 		}
 	}
 	
 	private void findExtremes() {
 		for (Point p : points) {
-			if (p.x < minX) {
-				minX = p.x;
+			if (p.getX() < minX) {
+				minX = p.getX();
 			} 
-			if (p.x > maxX) {
-				maxX = p.x;
+			if (p.getX() > maxX) {
+				maxX = p.getX();
 			}
-			if (p.y < minY) {
-				minY = p.y;
+			if (p.getY() < minY) {
+				minY = p.getY();
 			}
-			if (p.y > maxY) {
-				maxY = p.y;
+			if (p.getY() > maxY) {
+				maxY = p.getY();
 			}
 		}
 	}
