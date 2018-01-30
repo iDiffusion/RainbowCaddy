@@ -13,7 +13,7 @@ import java.util.Collections;
 public class Mesh {
 	public ArrayList<Point> points = new ArrayList<Point>();
 	ArrayList<Face> faces = new ArrayList<Face>();
-	public double minX = 0, minY = 0, maxX = 0, maxY = 0;
+	double minX = 0, minY = 0, maxX = 0, maxY = 0;
 	/**
 	 * Create an empty mesh
 	 */

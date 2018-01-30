@@ -97,7 +97,6 @@ public class Boot {
 		
 	}
 	
-	
 	public static Entity setNewColor(Camera camera, MousePicker mousePicker, OBJLoader objLoader, Loader loader, Entity entity) {
 		//----CONSOLE FOR DEBUGGING----------
 		System.out.println("Loading New Color");
@@ -119,6 +118,21 @@ public class Boot {
 					closestPoint = p;
 				}
 			}
+			
+//			closestPoint = CircleGen.nearestNeighbor(new Point(3.6, 13.5), mesh.points); //closest point to the center
+//			closestPoint = CircleGen.nearestNeighbor(new Point(5, 5), mesh.points); //closest point to the center
+//			Circle ring = null;
+//			int color = 160;
+//			for(int i = 1; i <= 6; i++) {
+//				ring = new Circle(5*i, closestPoint, 3000, mesh.points);
+//				for(Point t : ring.getCircle()) {
+//					for(Point p : mesh.points) {
+//						if (p.x > t.x-0.1 && p.x < t.x+0.1 && p.y > t.y-0.1 && p.y < t.y+0.1) {
+//							p.setRGB(color+= 10, color+= 10, color+=10);
+//						}
+//					}
+//				}
+//			}
 			
 			closestPoint = CircleGen.nearestNeighbor(new Point(1, 28), mesh.points); //closest point to the center
 			double nearest[] = {0.0,0.0,0.0,0.0};

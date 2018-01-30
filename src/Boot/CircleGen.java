@@ -80,7 +80,7 @@ public class CircleGen {
 				innerRing = nearestNeighbor(p, ring2);
 				outerRing.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
 				innerRing.setRGB(ring2.get(0).getR(), ring2.get(0).getG(), ring2.get(0).getB());
-//				genColor(outerRing, innerRing, p);
+				genColor(outerRing, innerRing, p);
 				p.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
 			}			
 		}
