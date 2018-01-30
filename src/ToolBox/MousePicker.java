@@ -34,6 +34,7 @@ public class MousePicker {
 	public void update() {
 		viewMatrix = Maths.createViewMatrix(camera);
 		currentRay = calculateRay();
+		//System.out.println(this.getCurrentRay());
 	}
 	
 	private Vector3f calculateRay() {

@@ -44,7 +44,6 @@ public class Boot {
 		firstPop.appendText("\n - Shaders Created.");
 		firstPop.appendText("\n - Loading Mesh From File.");
 		mesh = new Mesh(new File("res/model/model.obj"));
-		//mesh.setColor(0, 0, 255);
 		OBJLoader objLoader = new OBJLoader("res/model/model.obj", loader, mesh, firstPop);
 		
 		firstPop.appendText("\n - Creating Mesh.");
@@ -108,54 +107,41 @@ public class Boot {
 		mesh.setColor(0, 0, 0); //Set Color of mesh
 		//TODO Generate circles and load to Mesh object
 		if (mousePicker != null) {
-			float smallestDistance = 1000000;
-			Point closestPoint = null;
-			for (Point p : mesh.points) {
-				Vector3f point = new Vector3f((float)p.getX(), (float)p.getY(), (float)p.getZ());
-				float distance = mousePicker.distanceToPoint(point);
-				if (distance < smallestDistance) {
-					smallestDistance = distance;
-					closestPoint = p;
-				}
-			}
+			double err = 0.2;
+			//-----------------------GET THE POINTS OF THE RAY ON THE MESH------
+			double x = Boot.map(mousePicker.getCurrentRay().getX(), -.5, 0.5, mesh.minX, mesh.maxX);
+			double y = Boot.map(mousePicker.getCurrentRay().getY(), -.5, .5, mesh.minY, mesh.maxY);
 			
-//			closestPoint = CircleGen.nearestNeighbor(new Point(3.6, 13.5), mesh.points); //closest point to the center
-//			closestPoint = CircleGen.nearestNeighbor(new Point(5, 5), mesh.points); //closest point to the center
-//			Circle ring = null;
-//			int color = 160;
-//			for(int i = 1; i <= 6; i++) {
-//				ring = new Circle(5*i, closestPoint, 3000, mesh.points);
-//				for(Point t : ring.getCircle()) {
-//					for(Point p : mesh.points) {
-//						if (p.x > t.x-0.1 && p.x < t.x+0.1 && p.y > t.y-0.1 && p.y < t.y+0.1) {
-//							p.setRGB(color+= 10, color+= 10, color+=10);
-//						}
-//					}
-//				}
-//			}
+			//------ADJUST THOSE POINTS (TEMP FIX)-----------
+			x -= 3;
+			y += 5;
 			
-			closestPoint = CircleGen.nearestNeighbor(new Point(1, 28), mesh.points); //closest point to the center
-			double nearest[] = {0.0,0.0,0.0,0.0};
-			int numCircle;
+			System.out.println(mesh.minX + " " + mesh.maxX);
+			System.out.println(mousePicker.getCurrentRay().getX() + "  " + mousePicker.getCurrentRay().getY()  + "    " +x + "   " + y);
+			
+			Point closestPoint = CircleGen.nearestNeighbor(new Point(x,y), mesh.points);
+			
+			double nearest[] = {
+					Math.abs(mesh.minX - closestPoint.getX()),
+					Math.abs(mesh.minY - closestPoint.getY()),
+					Math.abs(mesh.maxX - closestPoint.getX()),
+					Math.abs(mesh.maxY - closestPoint.getY())
+			};
 			double farthest = mesh.maxX;
-			nearest[0] = Math.abs(mesh.minX - closestPoint.getX());
-			nearest[1] = Math.abs(mesh.minY - closestPoint.getY());
-			nearest[2] = Math.abs(mesh.maxX - closestPoint.getX());
-			nearest[3] = Math.abs(mesh.maxY - closestPoint.getY());
 			for(double d : nearest) {
 				if(d>farthest) {
 					farthest = d;
 				}
 			}
-			numCircle =  (int) Math.ceil((farthest/5));
+			int numCircle =  (int) Math.ceil((farthest/5));
+			
 			CircleGen.circleGeneration(closestPoint, mesh.points, 720, numCircle);
 			
-			System.out.printf(closestPoint.toString());
+			int currentColor = 255;
 			for (Point p : mesh.points) {
-				if (p.x > closestPoint.x-0.3 && p.x < closestPoint.x+0.3 && p.y > closestPoint.y-0.3 && p.y < closestPoint.y+0.3) {
-					p.r = 255;
-					p.g = 0;
-					p.b = 255;
+				if (p.getX() > x - err && p.getX() < x + err &&
+					p.getY() > y - err && p.getY() < y + err) {
+					p.setRGB(currentColor, currentColor, currentColor);
 				}
 			}
 		}
@@ -181,7 +167,6 @@ public class Boot {
 		frame.getContentPane().setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
-        int lastX = 0;
         //---------------ADD BUTTONS TO FRAME----------------
 		JButton refreshBtn = new JButton("Refresh");
 		refreshBtn.setBounds(10, frame.getHeight()/2-81, 100, 23);

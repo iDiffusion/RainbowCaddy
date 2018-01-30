@@ -128,7 +128,6 @@ public class Circle {
 	      double deltax,deltay; 
 	      double degCount=0;
 	      double degree = (float) 360/numSpokes;
-	      int ringCount = 0;
 	      ring = new ArrayList<Point>();
 	      Point tempPoint = null;
 	      for(degCount=0; degCount<360; degCount+=degree){
