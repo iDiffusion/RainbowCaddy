@@ -97,6 +97,7 @@ public class Boot {
 		
 	}
 	
+	public static int currentColor = 0;
 	
 	public static Entity setNewColor(Camera camera, MousePicker mousePicker, OBJLoader objLoader, Loader loader, Entity entity) {
 		//----CONSOLE FOR DEBUGGING----------
@@ -123,9 +124,10 @@ public class Boot {
 			for (Point p : mesh.points) {
 				if (p.getX() > x - err && p.getX() < x + err &&
 					p.getY() > y - err && p.getY() < y + err) {
-					p.setR(255);
+					p.setR(currentColor);
 				}
 			}
+			currentColor+=20;
 		}
 		//CircleGen.CircleGeneration(new Point(0,0,0), mesh.points, 360, 1);
 		//--------END CHANGE COLORS---------------
