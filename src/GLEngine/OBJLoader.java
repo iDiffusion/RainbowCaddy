@@ -10,6 +10,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import Boot.Boot;
 import Boot.Error_Popup;
 import Boot.Mesh;
 import Models.RawModel;
@@ -111,9 +112,9 @@ public class OBJLoader {
 		pop.appendText("\n - Loading Original Colors");
 		int colorIndex = 0;
 		for (int i = 0; i < verticesArray.length; i+=3) {
-			colorArray[i] = mesh.points.get(colorIndex).getR();
-			colorArray[i+1] = mesh.points.get(colorIndex).getG();
-			colorArray[i+2] = mesh.points.get(colorIndex).getB();
+			colorArray[i] = (float)Boot.map(mesh.points.get(colorIndex).getR(), 0, 255, 0, 1);
+			colorArray[i+1] = (float)Boot.map(mesh.points.get(colorIndex).getG(), 0, 255, 0, 1);
+			colorArray[i+2] = (float)Boot.map(mesh.points.get(colorIndex).getB(), 0, 255, 0, 1);
 			colorIndex++;
 		}
 		pop.appendText("\n - Finished Loading Original Colors");
@@ -125,9 +126,9 @@ public class OBJLoader {
 		pop.appendText("\n - Loading New Colors");
 		int colorIndex = 0;
 		for (int i = 0; i < verticesArray.length; i+=3) {
-			colorArray[i] = mesh.points.get(colorIndex).getR();
-			colorArray[i+1] = mesh.points.get(colorIndex).getG();
-			colorArray[i+2] = mesh.points.get(colorIndex).getB();
+			colorArray[i] = (float)Boot.map(mesh.points.get(colorIndex).getR(), 0, 255, 0, 1);
+			colorArray[i+1] = (float)Boot.map(mesh.points.get(colorIndex).getG(), 0, 255, 0, 1);
+			colorArray[i+2] = (float)Boot.map(mesh.points.get(colorIndex).getB(), 0, 255, 0, 1);
 			colorIndex++;
 		}		
 		return loader.loadToVao(verticesArray, textureArray, normalsArray, indicesArray, colorArray, vertices);
