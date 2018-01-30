@@ -144,7 +144,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 1.0;
+        return 10.0;
     }
     
     /**
@@ -155,7 +155,20 @@ public class Circle {
     	Point temp;
         for(Point p : ring) {
             temp = CircleGen.nearestNeighbor(p, points);
-            p.setXYZ(temp.getX(), temp.getY(), temp.getZ());
+            if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getY()==p.getY())||(Bounds.get(1).getY()==p.getY())) {
+            	if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())&&(Bounds.get(1).getY()==p.getY())||(Bounds.get(1).getY()==p.getY())) {
+            		p.setXYZ(p.getX(), p.getY(), temp.getZ());
+            	}
+            	else if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())) {
+            		p.setXYZ(p.getX(), temp.getY(), temp.getZ());
+            	}
+            	else {
+            		p.setXYZ(temp.getX(), p.getY(), temp.getZ());
+            	}
+            }
+            else {
+            	p.setXYZ(temp.getX(), temp.getY(), temp.getZ());
+            }
         }
         temp = null;
     }
@@ -169,10 +182,12 @@ public class Circle {
         double deltaz;
         Point temp = new Point(0,0,0);
         int numSpokes = ring.size();
-        for(int count = 0; count < numSpokes; count++){
-            deltaz = center.getZ() - ring.get(count).getZ();
-            temp.setXYZ((ring.get(count).getX() + deltaz * coeff() * ((ring.get(count).getX() - center.getX()) / radius)),(ring.get(count).getY() + deltaz * coeff() * ((ring.get(count).getY() - center.getY()) / radius)),0);
-            ring.get(count).setXYZ(temp.getX(), temp.getY(), temp.getZ());
+        for(int count = 0; count < numSpokes; count++){        	
+	        deltaz = center.getZ() - ring.get(count).getZ();
+	        temp.setXYZ((ring.get(count).getX() + deltaz * coeff() * ((ring.get(count).getX() - center.getX()) / radius)),(ring.get(count).getY() + deltaz * coeff() * ((ring.get(count).getY() - center.getY()) / radius)),0);
+	        if(!((Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(1).getY()==ring.get(count).getY())||(Bounds.get(1).getY()==ring.get(count).getY()))) {
+	        	ring.get(count).setXYZ(temp.getX(), temp.getY(), temp.getZ());
+	        }
         }
     }    
 }

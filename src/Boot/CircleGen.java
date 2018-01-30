@@ -19,14 +19,20 @@ public class CircleGen {
 	 * @param numCircle - Number of circle to make 
 	 */
 	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
-		colors.add(new Vector3d(1,255,1)); //Green - index 0
-		colors.add(new Vector3d(255,255,1)); //Yellow - index 1
-		colors.add(new Vector3d(255,1,1)); //Red - index 2
-		colors.add(new Vector3d(1,1,255)); //Blue - index 3
-		colors.add(new Vector3d(255,69,1)); //Orange - index 4
-		colors.add(new Vector3d(255,255,255)); //White - index 5
-		
-		Point point = new Point(points.get(0).getX(), points.get(0).getY(), points.get(0).getZ());
+		if( colors.isEmpty()) {
+			colors.add(new Vector3d(0,0,255)); //Blue - index 0
+			colors.add(new Vector3d(0,255,255)); //Pale Blue
+			colors.add(new Vector3d(0,255,0)); //Green - index 2
+			colors.add(new Vector3d(255,255,0)); //Yellow - index 3
+			colors.add(new Vector3d(255,0,0)); //red - index 4
+			colors.add(new Vector3d(255,0,255)); //Magenta - index 5
+			colors.add(new Vector3d(0,0,255)); //Blue - index 5
+			colors.add(new Vector3d(0,255,255)); //Light Blue - index 6
+			colors.add(new Vector3d(0,255,0)); //Green - index 7
+			colors.add(new Vector3d(255,255,0)); //YEllow - index 8
+			colors.add(new Vector3d(255,0,0)); //REd- index 9
+			colors.add(new Vector3d(255,0,255)); //Magenta - index 10
+		}
 		
 		double radius = 0;
 		ArrayList<Circle> circles = new ArrayList<Circle>();
@@ -35,6 +41,7 @@ public class CircleGen {
 			circles.add(new Circle(radius, center, spokes, points));	
 			for(Point p : circles.get(i-1).ring) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
+				nearestNeighbor(p,points).setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 			}
 			if(i == 1) {
 				for (Point p : points) {
@@ -73,7 +80,8 @@ public class CircleGen {
 				innerRing = nearestNeighbor(p, ring2);
 				outerRing.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
 				innerRing.setRGB(ring2.get(0).getR(), ring2.get(0).getG(), ring2.get(0).getB());
-				genColor(outerRing, innerRing, p);
+//				genColor(outerRing, innerRing, p);
+				p.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
 			}			
 		}
 	}

@@ -120,7 +120,7 @@ public class Boot {
 				}
 			}
 			
-			closestPoint = CircleGen.nearestNeighbor(new Point(3.6, 13.5), mesh.points); //closest point to the center
+			closestPoint = CircleGen.nearestNeighbor(new Point(1, 28), mesh.points); //closest point to the center
 			double nearest[] = {0.0,0.0,0.0,0.0};
 			int numCircle;
 			double farthest = mesh.maxX;
@@ -133,12 +133,12 @@ public class Boot {
 					farthest = d;
 				}
 			}
-			numCircle =  Math.abs(((int)farthest/5));
-			CircleGen.circleGeneration(closestPoint, mesh.points, 360, numCircle);
+			numCircle =  (int) Math.ceil((farthest/5));
+			CircleGen.circleGeneration(closestPoint, mesh.points, 720, numCircle);
 			
 			System.out.printf(closestPoint.toString());
 			for (Point p : mesh.points) {
-				if (p.x > closestPoint.x-0.1 && p.x < closestPoint.x+0.1 && p.y > closestPoint.y-0.1 && p.y < closestPoint.y+0.1) {
+				if (p.x > closestPoint.x-0.3 && p.x < closestPoint.x+0.3 && p.y > closestPoint.y-0.3 && p.y < closestPoint.y+0.3) {
 					p.r = 255;
 					p.g = 0;
 					p.b = 255;
