@@ -18,7 +18,7 @@ public class CircleGen {
 	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
 	 * @param numCircle - Number of circle to make 
 	 */
-	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
+	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle, ArrayList<Point> bounds){
 		if( colors.isEmpty()) {
 			colors.add(new Vector3d(0,0,255)); //Blue - index 0
 			colors.add(new Vector3d(0,255,255)); //Pale Blue
@@ -38,7 +38,7 @@ public class CircleGen {
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 1; i <= numCircle; i++) {
 			radius+=5;
-			circles.add(new Circle(radius, center, spokes, points));	
+			circles.add(new Circle(radius, center, spokes, points, bounds));	
 			for(Point p : circles.get(i-1).ring) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 				nearestNeighbor(p,points).setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);

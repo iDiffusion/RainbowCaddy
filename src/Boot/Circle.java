@@ -22,8 +22,8 @@ public class Circle {
 	 * @param numSpokes - the number of spokes to draw points on
 	 * @param points - a list of the object files points
 	 */
-	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points) {
-		bounds(points);
+	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds) {
+		Bounds = bounds;
 		makeCircle(center,radius,numSpokes);
 		assignHeights(points);
 		pushCircle(center, radius);
@@ -91,34 +91,6 @@ public class Circle {
 		}
 	}
 	/**
-	 * @return Returns the bounds of the array in the forms of an ArrayList<Point> index 0 
-	 * being the largest X and Y and index 1 being the smallest
-	 * @param points - Array to be bounded
-	 */	
-	private void bounds(ArrayList<Point> points) {
-		double minX = points.get(0).getX();
-		double minY = points.get(0).getY();
-		double maxX = points.get(0).getX();
-		double maxY = points.get(0).getY();
-		Bounds = new ArrayList<Point>();
-		for(Point p: points) {
-			if(minX > p.getX()) {
-				minX = p.getX();
-			}
-			else if(maxX < p.getX()) {
-				maxX = p.getX();
-			}
-			else if(minY > p.getY()) {
-				minY = p.getY();
-			}
-			else if(maxY < p.getY()) {
-				maxY = p.getY();
-			}
-		}
-		Bounds.add(new Point(maxX,maxY,0));
-		Bounds.add(new Point(minX,minY,0));
-	}
-	/**
 	 * @return Generate points along a set number of spokes for a circle of a given radius 
 	 * @param center - contains the X,Y,Z points of the center
 	 * @param radius - the distance from the center point
@@ -143,7 +115,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 10.0;
+        return 5.0;
     }
     
     /**
