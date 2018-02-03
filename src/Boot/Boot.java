@@ -24,7 +24,7 @@ import Textures.ModelTexture;
 import ToolBox.MousePicker;
 
 public class Boot {
-	public static Mesh mesh;
+    public static Mesh mesh;
 	private static boolean isRefreshed = false;
 	private static JFrame frame = new JFrame("Control Panel");
 
@@ -43,7 +43,7 @@ public class Boot {
 		Renderer renderer = new Renderer(shader);
 		firstPop.appendText("\n - Shaders Created.");
 		firstPop.appendText("\n - Loading Mesh From File.");
-		mesh = new Mesh(new File("res/model/model.obj"));
+		mesh = new Mesh(new File("res/model/model.obj"));//
 		OBJLoader objLoader = new OBJLoader("res/model/model.obj", loader, mesh, firstPop);
 		
 		firstPop.appendText("\n - Creating Mesh.");
