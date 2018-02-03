@@ -39,7 +39,7 @@ public class CircleGen {
 		for(int i = 1; i <= numCircle; i++) {
 			radius+=5;
 			if(i!=1) {
-				circles.add(new Circle(radius, center, spokes, points, bounds, circles.get(i-1)));
+				circles.add(new Circle(radius, center, spokes, points, bounds, circles.get(i-2)));
 			}
 			else {
 				circles.add(new Circle(radius, center, spokes, points, bounds, null));

@@ -25,7 +25,7 @@ public class Circle {
 	 */
 	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds, Circle prev) {
 		Bounds = bounds;
-		makeCircle(prev,center,radius,numSpokes);
+		makeCircle(prev,center,numSpokes);
 		assignHeights(points);
 		pushCircle(center, radius);
 		assignHeights(points);
@@ -98,30 +98,23 @@ public class Circle {
 	 * @param radius - the distance from the center point
 	 * @param numSpokes - the number of spokes to draw point on
 	 */
-	public void makeCircle(Circle prev, Point center, double radius, int numSpokes){
+	public void makeCircle(Circle prev, Point center, int numSpokes){
+		double radius = 5;
         double deltax,deltay; 
         double radCount=0;
-        double radians = (float) Math.PI/numSpokes;
+        double radians = (float) 2*Math.PI/numSpokes;
         int i=0;
         ring = new ArrayList<Point>();
         Point tempPoint = null;
         if(prev != null) {
-//		    for(i=0; i<numSpokes; i++){
-//		        deltax = radius*Math.cos(radCount);
-//		        deltay = radius*Math.sin(radCount);
-//		        tempPoint = new Point(prev.ring.get(i).getX() + deltax, prev.ring.get(i).getY() + deltay,0);
-//		        storePoint(tempPoint);
-//		        tempPoint = null;
-//		        radCount+=radians;
-//		    }
-        	for(i=0; i<numSpokes; i++){
-				deltax = radius*Math.cos(radCount);
-				deltay = radius*Math.sin(radCount);
-				tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
-				storePoint(tempPoint);
+		    for(i=0; i<numSpokes; i++){
+		        deltax = radius*Math.cos(radCount);
+		        deltay = radius*Math.sin(radCount);
+		        tempPoint = new Point(prev.ring.get(i).getX() + deltax, prev.ring.get(i).getY() + deltay,0);
+		        storePoint(tempPoint);
 		        tempPoint = null;
 		        radCount+=radians;
-			}
+		    }
         }
         else {
 			for(i=0; i<numSpokes; i++){
@@ -133,6 +126,7 @@ public class Circle {
 		        radCount+=radians;
 			}
         }
+        return;
     }
 //	public void makeCircle(Point center, double radius, int numSpokes){
 //	      double deltax,deltay; 
@@ -153,7 +147,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 5.0;
+        return 2.0;
     }
     
     /**
