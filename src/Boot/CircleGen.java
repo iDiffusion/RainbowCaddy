@@ -47,7 +47,7 @@ public class CircleGen {
 				for (Point p : points) {
 					if(insideRing(p,circles.get(i-1).ring)){
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
-						System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");
+						//System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");
 					}
 				}
 			}
@@ -55,7 +55,7 @@ public class CircleGen {
 				for(Point p : points) {
 					if(!insideRing(p, circles.get(i-1).ring)) {
 						p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
-						System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");	
+						//System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");	
 					}
 				}
 			}
@@ -63,7 +63,7 @@ public class CircleGen {
 				fillRings(points, circles.get(i-1).ring, circles.get(i-2).ring);
 			}
 		}
-		System.out.print("Finished");
+		System.out.println("Finished");
 	}
 	/**
 	 * @return Fills the rgb values of the points between the rings based on the color of the rings
@@ -128,7 +128,7 @@ public class CircleGen {
 		double outerPercent = outerDistance/(innerDistance+outerDistance);
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
-		System.out.print(color.getR()+" "+color.getG()+" "+color.getB()+"\n");
+		//System.out.print(color.getR()+" "+color.getG()+" "+color.getB()+"\n");
 	}
 	/**
 	 * 

@@ -113,11 +113,7 @@ public class Boot {
 			double y = Boot.map(mousePicker.getCurrentRay().getY(), -.5, .5, mesh.minY, mesh.maxY);
 			
 			//------ADJUST THOSE POINTS (TEMP FIX)-----------
-			x -= 3;
-			y += 5;
-			
-			System.out.println(mesh.minX + " " + mesh.maxX);
-			System.out.println(mousePicker.getCurrentRay().getX() + "  " + mousePicker.getCurrentRay().getY()  + "    " +x + "   " + y);
+			x -= 3; y += 5;
 			
 			Point closestPoint = CircleGen.nearestNeighbor(new Point(x,y), mesh.points);
 			
@@ -139,8 +135,8 @@ public class Boot {
 			
 			int currentColor = 255;
 			for (Point p : mesh.points) {
-				if (p.getX() > x - err && p.getX() < x + err &&
-					p.getY() > y - err && p.getY() < y + err) {
+				if (p.getX() > closestPoint.x - err && p.getX() < closestPoint.x + err &&
+					p.getY() > closestPoint.y - err && p.getY() < closestPoint.y + err) {
 					p.setRGB(currentColor, currentColor, currentColor);
 				}
 			}

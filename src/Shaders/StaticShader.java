@@ -1,8 +1,5 @@
 package Shaders;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 
 import Entities.Camera;
