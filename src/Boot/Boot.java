@@ -97,6 +97,7 @@ public class Boot {
 		
 	}
 	
+	public static int currentColor = 0;
 	
 	public static Entity setNewColor(Camera camera, MousePicker mousePicker, OBJLoader objLoader, Loader loader, Entity entity) {
 		//----CONSOLE FOR DEBUGGING----------
@@ -109,24 +110,24 @@ public class Boot {
 		mesh.setColor(0, 0, 0); //Set Color of mesh
 		//TODO Generate circles and load to Mesh object
 		if (mousePicker != null) {
-			float smallestDistance = 1000000;
-			Point closestPoint = null;
+			double err = 10;
+			//-----------------------GET THE POINTS OF THE RAY ON THE MESH------
+			double x = Boot.map(mousePicker.getCurrentRay().getX(), -.5, 0.5, mesh.minX, mesh.maxX);
+			double y = Boot.map(mousePicker.getCurrentRay().getY(), -.5, .5, mesh.minY, mesh.maxY);
+			
+			//------ADJUST THOSE POINTS (TEMP FIX)-----------
+			x -= 3;
+			y += 5;
+			
+			System.out.println(mesh.minX + " " + mesh.maxX);
+			System.out.println(mousePicker.getCurrentRay().getX() + "  " + mousePicker.getCurrentRay().getY()  + "    " +x + "   " + y);
 			for (Point p : mesh.points) {
-				Vector3f point = new Vector3f((float)p.x, (float)p.y, (float)p.z);
-				float distance = mousePicker.distanceToPoint(point);
-				if (distance < smallestDistance) {
-					smallestDistance = distance;
-					closestPoint = p;
+				if (p.getX() > x - err && p.getX() < x + err &&
+					p.getY() > y - err && p.getY() < y + err) {
+					p.setR(currentColor);
 				}
 			}
-			System.out.printf("Point: %f : %f : %f \n", closestPoint.x, closestPoint.y, closestPoint.z);
-			for (Point p : mesh.points) {
-				if (p.x > closestPoint.x-5 && p.x < closestPoint.x+5 && p.y > closestPoint.y-5 && p.y < closestPoint.y+5) {
-					p.r = 255;
-					p.g = 0;
-					p.b = 255;
-				}
-			}
+			currentColor+=20;
 		}
 		//CircleGen.CircleGeneration(new Point(0,0,0), mesh.points, 360, 1);
 		//--------END CHANGE COLORS---------------
@@ -150,7 +151,6 @@ public class Boot {
 		frame.getContentPane().setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
-        int lastX = 0;
         //---------------ADD BUTTONS TO FRAME----------------
 		JButton refreshBtn = new JButton("Refresh");
 		refreshBtn.setBounds(10, frame.getHeight()/2-81, 100, 23);

@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import org.lwjgl.util.vector.Vector3f;
 /**
  * A mesh is a collection of points and faces to create a model to be displayed on the Display Frame.
  * @author Keegan Bruer
@@ -12,13 +14,15 @@ import java.util.Collections;
  */
 public class Mesh {
 	public ArrayList<Point> points = new ArrayList<Point>();
+	public ArrayList<Vector3f> normalizedPoints = new ArrayList<Vector3f>();
 	ArrayList<Face> faces = new ArrayList<Face>();
 	double minX = 0, minY = 0, maxX = 0, maxY = 0;
 	/**
 	 * Create an empty mesh
 	 */
 	public Mesh() {
-		
+		normalizePoints();
+		findExtremes();
 	}
 	/**
 	 * Create a mesh from existing point array
@@ -30,6 +34,7 @@ public class Mesh {
 			createFaces();
 		}
 		findExtremes();
+		normalizePoints();
 	}
 	/**
 	 * Create a mesh from existing point ArrayList
@@ -41,6 +46,7 @@ public class Mesh {
 			createFaces();
 		}
 		findExtremes();
+		normalizePoints();
 	}
 	
 	/**
@@ -54,6 +60,8 @@ public class Mesh {
 			e.printStackTrace();
 			System.out.println("Could Not Read From File");
 		}
+		findExtremes();
+		normalizePoints();
 	}
 	/**
 	 * Use this method to generate faces from the meshes array of points.
@@ -69,9 +77,9 @@ public class Mesh {
 		int rowSize = 0;
 		for (Point p : temp) {
 			if (lastY == -10000) {
-				lastY = (int)p.y;
+				lastY = (int)p.getY();
 			}
-			if ((int)p.y == lastY) {
+			if ((int)p.getY() == lastY) {
 				rowSize++;
 			}
 		}
@@ -83,8 +91,8 @@ public class Mesh {
 	
 	public void moveMesh(double x, double y) {
 		for(int i = 0; i < points.size(); i++) {
-			points.get(i).x += x;
-			points.get(i).y += y;
+			points.get(i).setX(x + points.get(i).getX());
+			points.get(i).setY(y + points.get(i).getY());
 		}
 	}
 	
@@ -140,26 +148,34 @@ public class Mesh {
 	 */
 	public void setColor(int r, int g, int b) {
 		for (Point p : points) {
-			p.r = r;
-			p.g = g;
-			p.b = b;
+			p.setR(r);
+			p.setG(g);
+			p.setB(b);
 		}
 	}
 	
 	private void findExtremes() {
 		for (Point p : points) {
-			if (p.x < minX) {
-				minX = p.x;
+			if (p.getX() < minX) {
+				minX = p.getX();
 			} 
-			if (p.x > maxX) {
-				maxX = p.x;
+			if (p.getX() > maxX) {
+				maxX = p.getX();
 			}
-			if (p.y < minY) {
-				minY = p.y;
+			if (p.getY() < minY) {
+				minY = p.getY();
 			}
-			if (p.y > maxY) {
-				maxY = p.y;
+			if (p.getY() > maxY) {
+				maxY = p.getY();
 			}
+		}
+	}
+	
+	private void normalizePoints() {
+		for (Point p : this.points) {
+			float x = (float)Boot.map(p.getX(), this.minX, this.maxX, -0.5, 0.5);
+			float y = (float)Boot.map(p.getY(), this.minY, this.maxY, -0.5, 0.5);
+			this.normalizedPoints.add(new Vector3f(x, y, 0));
 		}
 	}
 }

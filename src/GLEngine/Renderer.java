@@ -105,7 +105,7 @@ public class Renderer {
 		return FAR_PLANE;
 	}
 
-	public static Matrix4f getProjectionMatrix() {
+	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
 	

@@ -1,15 +1,47 @@
 package Boot;
+
 import javax.vecmath.Vector3d;
+
 /**
  * A point object holds x, y, z values as well as r, g, b values.
- * 
- * @author Keegan Bruer <br>
+ * @author Keegan Bruer
+ * @author Tylon Lee
  */
+
 public class Point implements Comparable<Point> {
-	double x, y, z;
-	public int r, g, b;
+	
+	private double x, y, z;
+	private int r, g, b;
+	
 	/**
-	 * create point with x, y, z and black as the color.
+	 * create point with x, y, z and set the color.
+	 * @param p
+	 */
+	public Point(Point p) {
+		this.x = p.getX();
+		this.y = p.getY();
+		this.z = p.getZ();
+		this.r = p.getR();
+		this.g = p.getG();
+		this.b = p.getB();
+	}
+	
+	/**
+	 * create point with x, y, z and black as default the color.
+	 * @param x
+	 * @param y
+	 */
+	public Point(double x, double y) {
+		this.x = x;
+		this.y = y;
+		this.z = 0.0;
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
+	}
+	
+	/**
+	 * create point with x, y, z and black as default the color.
 	 * @param x
 	 * @param y
 	 * @param z
@@ -18,10 +50,11 @@ public class Point implements Comparable<Point> {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		r = 0;
-		g = 0;
-		b = 0;
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
 	}
+	
 	/**
 	 * create new point specifying the x, y, z and r, g, b values.
 	 * @param x
@@ -53,23 +86,6 @@ public class Point implements Comparable<Point> {
 	}
 	
 	/**
-	 * Get the xyz values as a array of doubles.
-	 * @return
-	 */
-	public double[] getXYZAsArray() {
-		double[] rtn = {x, y, z};
-		return rtn;
-	}
-	
-	/**
-	 * Returns XYZ as Vector3f
-	 * @return - Vector3f of XYZ
-	 */
-	public Vector3d getXYZ() {
-		return new Vector3d(x, y, z);
-	}
-	
-	/**
 	 * set the RGB values after being created.
 	 * @param r
 	 * @param g
@@ -80,15 +96,37 @@ public class Point implements Comparable<Point> {
 		this.g = g;
 		this.b = b;
 	}
+	
 	/**
-	 * get array of RGB values as doubles.
-	 * @return
+	 * Get the xyz values as a array of doubles.
+	 * @return double[] xyz
+	 */
+	public double[] getXYZAsArray() {
+		double[] rtn = {x, y, z};
+		return rtn;
+	}
+	
+	/**
+	 * get the rgb values as an array of integers.
+	 * @return int[] rgb
 	 */
 	public int[] getRGBAsArray() {
 		int[] rtn = {r, g, b};
 		return rtn;
 	}
 	
+	/**
+	 * Get the xyz values as a vector array of doubles.
+	 * @return Vector3d xyz
+	 */
+	public Vector3d getXYZ() {
+		return new Vector3d(x, y, z);
+	}
+	
+	/**
+	 * get the rgb values as an vector array of doubles.
+	 * @return Vector3d rgb
+	 */
 	public Vector3d getRGB() {
 		return new Vector3d(r, g, b);
 	}
@@ -100,6 +138,7 @@ public class Point implements Comparable<Point> {
 	public void setX(double x) {
 		this.x = x;
 	}
+	
 	/**
 	 * set y position
 	 * @param y
@@ -107,6 +146,7 @@ public class Point implements Comparable<Point> {
 	public void setY(double y) {
 		this.y = y;
 	}
+	
 	/**
 	 * set z position
 	 * @param z
@@ -114,26 +154,90 @@ public class Point implements Comparable<Point> {
 	public void setZ(double z) {
 		this.z = z;
 	}
+	
+	/**
+	 * set r value
+	 * @param r
+	 */
+	public void setR(int r) {
+		this.r = r;
+	}
+	
+	/**
+	 * set g value
+	 * @param g
+	 */
+	public void setG(int g) {
+		this.g = g;
+	}
+	
+	/**
+	 * set b value
+	 * @param b
+	 */
+	public void setB(int b) {
+		this.b = b;
+	}
+	
 	/**
 	 * get x position
-	 * 
+	 * @return x
 	 */
 	public double getX() {
 		return this.x;
 	}
+	
 	/**
 	 * get y position
-	 * 
+	 * @return y
 	 */
-	public double getY() {
+	double getY() {
 		return this.y;
 	}
+	
 	/**
 	 * get z position
-	 * 
+	 * @return z
 	 */
 	public double getZ() {
 		return this.z;
+	}
+	
+	/**
+	 * get r value
+	 * @return r
+	 */
+	public int getR() {
+		return this.r;
+	}
+	
+	/**
+	 * get g value
+	 * @return g
+	 */
+	public int getG() {
+		return this.g;
+	}
+	
+	/**
+	 * get b value
+	 * @return b
+	 */
+	public int getB() {
+		return this.b;
+	}
+	
+	/**
+	 * Creates a string to represent the point
+	 * @return String containing the point's values
+	 */
+	@Override
+	public String toString() {
+		String thePoint = "Point[" + getClass().hashCode() + "]:";
+		String xValue = this.x + "X";
+		String yValue = this.y + "Y";
+		String zValue = this.z + "Z";
+		return (thePoint + "   " + xValue + "    " + yValue + "   " + zValue + "\n");
 	}
 
 	/**
@@ -143,4 +247,5 @@ public class Point implements Comparable<Point> {
 	public int compareTo(Point p) {
 		return (int) ((int)p.x - (int)this.x);
 	}
+	
 }

@@ -53,7 +53,7 @@ public class CircleGen {
 			nextColor = colors.get(i);
 			for (Point p : points) { //for each point in mesh
 				for (Point p2 : tempCircle.ring) { //for each point in ring
-					if (p.x == p2.x && p.y == p2.y) { //if same x and y for both points
+					if (p.getX() == p2.getX() && p.getY() == p2.getY()) { //if same x and y for both points
 						p.setRGB(p2.getRGBAsArray()[0], p2.getRGBAsArray()[1], p2.getRGBAsArray()[2]); //set mesh point rgb to ring point rgb
 					}
 				}
