@@ -35,7 +35,7 @@ public class Circle {
 	 * @return a list of points that make up the ring
 	 * @param N/A
 	 */
-	public ArrayList<Point> getCircle(){
+	public ArrayList<Point> getRing(){
         return ring;
     }
 	/**
@@ -147,7 +147,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 2.0;
+        return 6;
     }
     
     /**
@@ -188,7 +188,7 @@ public class Circle {
         for(int count = 0; count < numSpokes; count++){        	
 	        deltaz = center.getZ() - ring.get(count).getZ();
 	        temp.setXYZ((ring.get(count).getX() + deltaz * coeff() * ((ring.get(count).getX() - center.getX()) / radius)),(ring.get(count).getY() + deltaz * coeff() * ((ring.get(count).getY() - center.getY()) / radius)),0);
-	        if(!((Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(1).getY()==ring.get(count).getY())||(Bounds.get(1).getY()==ring.get(count).getY()))) {
+	        if(!((Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(1).getX()==ring.get(count).getX())||(Bounds.get(0).getY()==ring.get(count).getY())||(Bounds.get(0).getY()==ring.get(count).getY()))) {
 	        	ring.get(count).setXYZ(temp.getX(), temp.getY(), temp.getZ());
 	        }
         }
