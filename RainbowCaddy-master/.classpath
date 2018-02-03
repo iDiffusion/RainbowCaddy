@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lwjgl">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="RainbowCaddy/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/jbox2d-library-2.1.2.2.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/jbullet.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/jdom-1.1.2.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="RainbowCaddy/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/slf4j-api-1.6.6.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/slf4j-simple-1.6.6.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/slick.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/slick-util.jar"/>
+	<classpathentry kind="lib" path="D:/Ikaika Lee/Programs/Workspace/RainbowCaddy/lib/vecmath.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
