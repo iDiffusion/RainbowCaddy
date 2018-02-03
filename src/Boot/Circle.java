@@ -47,7 +47,7 @@ public class Circle {
 			ring.add(point);
 		}
 		else {
-			if((point.getX()>Bounds.get(0).getX())){ // Above Upper X
+			if((point.getX()>=Bounds.get(0).getX())){ // Above Upper X
 				if((point.getY()>Bounds.get(0).getY())){//Above Upper Y and Above X
 					point.setX(Bounds.get(0).getX());
 					point.setY(Bounds.get(0).getY());
@@ -63,13 +63,13 @@ public class Circle {
 					ring.add(point);
 				}
 			}
-			if((point.getX()<Bounds.get(1).getX())){ // Below Lower X
-				if((point.getY()>Bounds.get(0).getY())){//Above Upper Y and below X
+			if((point.getX()<=Bounds.get(1).getX())){ // Below Lower X
+				if((point.getY()>=Bounds.get(0).getY())){//Above Upper Y and below X
 					point.setX(Bounds.get(1).getX());
 					point.setY(Bounds.get(0).getY());
 					ring.add(point);
 				}
-				else if((point.getY()<Bounds.get(1).getY())){//Below Lower Y and X
+				else if((point.getY()<=Bounds.get(1).getY())){//Below Lower Y and X
 					point.setX(Bounds.get(1).getX());
 					point.setY(Bounds.get(1).getY());
 					ring.add(point);
@@ -80,11 +80,11 @@ public class Circle {
 				}
 			}
 			else { // X is fine
-				if((point.getY()>Bounds.get(0).getY())){ //Above Upper Y 
+				if((point.getY()>=Bounds.get(0).getY())){ //Above Upper Y 
 					point.setY(Bounds.get(0).getY());
 					ring.add(point);
 				}
-				else if((point.getY()<Bounds.get(1).getY())){//Below Lower Y
+				else if((point.getY()<=Bounds.get(1).getY())){//Below Lower Y
 					point.setY(Bounds.get(1).getY());
 					ring.add(point);
 				}
@@ -127,27 +127,12 @@ public class Circle {
 			}
         }
         return;
-    }
-//	public void makeCircle(Point center, double radius, int numSpokes){
-//	      double deltax,deltay; 
-//	      double degCount=0;
-//	      double degree = (float) 360/numSpokes;
-//	      ring = new ArrayList<Point>();
-//	      Point tempPoint = null;
-//	      for(degCount=0; degCount<360; degCount+=degree){
-//	          deltax = radius*Math.cos(Math.toRadians(degCount));
-//	          deltay = radius*Math.sin(Math.toRadians(degCount));
-//	          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
-//	          storePoint(tempPoint);
-//	          tempPoint = null;
-//	      }
-//	  }
-    
+    } 
     /**
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 6;
+        return .75;
     }
     
     /**
@@ -155,25 +140,9 @@ public class Circle {
      * @param points
      */
     private void assignHeights(ArrayList<Point> points) {
-    	Point temp;
         for(Point p : ring) {
-            temp = CircleGen.nearestNeighbor(p, points);
-            if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getY()==p.getY())||(Bounds.get(1).getY()==p.getY())) {
-            	if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())&&(Bounds.get(1).getY()==p.getY())||(Bounds.get(1).getY()==p.getY())) {
-            		p.setXYZ(p.getX(), p.getY(), temp.getZ());
-            	}
-            	else if((Bounds.get(1).getX()==p.getX())||(Bounds.get(1).getX()==p.getX())) {
-            		p.setXYZ(p.getX(), temp.getY(), temp.getZ());
-            	}
-            	else {
-            		p.setXYZ(temp.getX(), p.getY(), temp.getZ());
-            	}
-            }
-            else {
-            	p.setXYZ(temp.getX(), temp.getY(), temp.getZ());
-            }
+        	p.setZ(CircleGen.nearestNeighbor(p, points).getZ());
         }
-        temp = null;
     }
     
     /**

@@ -130,12 +130,7 @@ public class Boot {
 				}
 			}
 			int numCircle =  (int) Math.ceil((farthest/5));
-			ArrayList<Point> bounds = new ArrayList<Point>();
-			if(bounds.isEmpty()) {
-				bounds.add(new Point(mesh.maxX, mesh.maxY,0));
-				bounds.add(new Point(mesh.minX, mesh.minY,0));
-			}
-			CircleGen.circleGeneration(closestPoint, mesh.points, 540, numCircle, bounds);
+			CircleGen.circleGeneration(closestPoint, mesh.points, 540, numCircle);
 			
 			int currentColor = 255;
 			for (Point p : mesh.points) {

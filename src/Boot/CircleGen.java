@@ -11,6 +11,10 @@ import javax.vecmath.Vector3d;
 public class CircleGen {
 	public static ArrayList<Vector3d> colorList  = new ArrayList<Vector3d>();
 	public static ArrayList<Vector3d> colors  = new ArrayList<Vector3d>();
+	public static double minX;
+	public static double maxX;
+	public static double minY;
+	public static double maxY;
 	
 	/**
 	 * @return Generates circles and fills in the colors based on change in elevation
@@ -19,24 +23,47 @@ public class CircleGen {
 	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
 	 * @param numCircle - Number of circle to make 
 	 */
-	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle, ArrayList<Point> bounds){
+	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
+		ArrayList<Point> bounds  = new ArrayList<Point>();
+		if(bounds.isEmpty()) {
+			minX = points.get(0).getX();
+			minY = points.get(0).getY();
+			maxX = points.get(0).getX();
+			maxY = points.get(0).getY();
+			for(Point p : points) {
+				if (p.getX() < minX) {
+					minX = p.getX();
+				} 
+				if (p.getX() > maxX) {
+					maxX = p.getX();
+				}
+				if (p.getY() < minY) {
+					minY = p.getY();
+				}
+				if (p.getY() > maxY) {
+					maxY = p.getY();
+				}
+			}
+			bounds.add(new Point(maxX,maxY));
+			bounds.add(new Point(minX,minY));
+		}
 		System.out.println("Center X:" + center.getX() + " Y:" + center.getY() +"\n");
 		System.out.println("Bounds: \nX Max: " + bounds.get(0).getX() + " Y Max: " + bounds.get(0).getY() +"\nX Min: " + bounds.get(1).getX() + " Y Min: " + bounds.get(1).getY() + "\n");
-		colorList.add(new Vector3d(0,0,255)); //Blue - index 0
-		colorList.add(new Vector3d(0,255,255)); //Pale Blue - index 1
-		colorList.add(new Vector3d(0,255,0)); //Green - index 2
-		colorList.add(new Vector3d(255,255,0)); //Yellow - index 3
-		colorList.add(new Vector3d(255,0,0)); //red - index 4
-		colorList.add(new Vector3d(255,0,255)); //Magenta - index 6
+		colorList.add(new Vector3d(0,255,0)); //Green
+		colorList.add(new Vector3d(150,175,0)); //Yellow
+		colorList.add(new Vector3d(255,0,0)); //Red
+		colorList.add(new Vector3d(125,0,205)); //Magenta
+		colorList.add(new Vector3d(0,0,255)); //Blue
+		colorList.add(new Vector3d(0,130,200)); //Pale Blue
 		boolean done = false;
 		int count = 0;
 		double radius = 0;
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		ArrayList<Point> tempBounds = new ArrayList<Point>();
-		tempBounds.add(new Point(bounds.get(0).getX()+3,bounds.get(0).getY()+3));
-		tempBounds.add(new Point(bounds.get(0).getX()+3,bounds.get(1).getY()-3));
-		tempBounds.add(new Point(bounds.get(1).getX()-3,bounds.get(1).getY()-3));
-		tempBounds.add(new Point(bounds.get(1).getX()-3,bounds.get(0).getY()+3)); 
+		tempBounds.add(new Point(maxX+3,maxY+3));
+		tempBounds.add(new Point(maxX+3,minY-3));
+		tempBounds.add(new Point(minX-3,minY-3));
+		tempBounds.add(new Point(minX-3,maxY+3)); 
 		while(!done) {
 			addColor(count);
 			radius+=5;
@@ -54,14 +81,13 @@ public class CircleGen {
 				for (Point p : points) {
 					if(insideRing(p,circles.get(count).ring)){
 						p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
-//						System.out.print(p.getR()+" "+p.getG()+" "+p.getB()+"\n");
 					}
 				}
 			}
 			else {
 				fillRings(points, circles.get(count).ring, circles.get(count-1).ring);
 			}
-			if(numCircle+1 == count) {
+			if(numCircle == count) {
 				for(Point p: tempBounds) {
 					p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
 				}
@@ -119,10 +145,13 @@ public class CircleGen {
 						count++;
 					}
 				}
-				if(ring.get(i).getY() < ring.get(item).getY()) { //if slant up
+				else if(ring.get(i).getY() < ring.get(item).getY()) { //if slant up
 					if(((ring.get(item).getY() >= point.getY()) && (ring.get(i).getY() <= point.getY()))) {
 						count++;
 					}
+				}
+				else if(ring.get(i).getY()==maxY||ring.get(i).getX()==maxX) {
+					return true;
 				}
 			}
 		}
