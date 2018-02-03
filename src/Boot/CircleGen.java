@@ -38,7 +38,12 @@ public class CircleGen {
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 1; i <= numCircle; i++) {
 			radius+=5;
-			circles.add(new Circle(radius, center, spokes, points, bounds));	
+			if(i!=1) {
+				circles.add(new Circle(radius, center, spokes, points, bounds, circles.get(i-1)));
+			}
+			else {
+				circles.add(new Circle(radius, center, spokes, points, bounds, null));
+			}
 			for(Point p : circles.get(i-1).ring) {
 				p.setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
 				nearestNeighbor(p,points).setRGB((int)colors.get(i-1).x,(int)colors.get(i-1).y,(int)colors.get(i-1).z);
@@ -128,7 +133,7 @@ public class CircleGen {
 		double outerPercent = outerDistance/(innerDistance+outerDistance);
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
-		//System.out.print(color.getR()+" "+color.getG()+" "+color.getB()+"\n");
+		System.out.print(color.getR()+" "+color.getG()+" "+color.getB()+"\n");
 	}
 	/**
 	 * 

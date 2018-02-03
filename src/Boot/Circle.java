@@ -21,10 +21,11 @@ public class Circle {
 	 * @param center - contains the X,Y,Z points of the center
 	 * @param numSpokes - the number of spokes to draw points on
 	 * @param points - a list of the object files points
+	 * @param prev - Previous Circle made
 	 */
-	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds) {
+	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds, Circle prev) {
 		Bounds = bounds;
-		makeCircle(center,radius,numSpokes);
+		makeCircle(prev,center,radius,numSpokes);
 		assignHeights(points);
 		pushCircle(center, radius);
 		assignHeights(points);
@@ -92,24 +93,61 @@ public class Circle {
 	}
 	/**
 	 * @return Generate points along a set number of spokes for a circle of a given radius 
+	 * @param prev - Previous circle
 	 * @param center - contains the X,Y,Z points of the center
 	 * @param radius - the distance from the center point
 	 * @param numSpokes - the number of spokes to draw point on
 	 */
-	public void makeCircle(Point center, double radius, int numSpokes){
-	      double deltax,deltay; 
-	      double degCount=0;
-	      double degree = (float) 360/numSpokes;
-	      ring = new ArrayList<Point>();
-	      Point tempPoint = null;
-	      for(degCount=0; degCount<360; degCount+=degree){
-	          deltax = radius*Math.cos(Math.toRadians(degCount));
-	          deltay = radius*Math.sin(Math.toRadians(degCount));
-	          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
-	          storePoint(tempPoint);
-	          tempPoint = null;
-	      }
-	  }
+	public void makeCircle(Circle prev, Point center, double radius, int numSpokes){
+        double deltax,deltay; 
+        double radCount=0;
+        double radians = (float) Math.PI/numSpokes;
+        int i=0;
+        ring = new ArrayList<Point>();
+        Point tempPoint = null;
+        if(prev != null) {
+//		    for(i=0; i<numSpokes; i++){
+//		        deltax = radius*Math.cos(radCount);
+//		        deltay = radius*Math.sin(radCount);
+//		        tempPoint = new Point(prev.ring.get(i).getX() + deltax, prev.ring.get(i).getY() + deltay,0);
+//		        storePoint(tempPoint);
+//		        tempPoint = null;
+//		        radCount+=radians;
+//		    }
+        	for(i=0; i<numSpokes; i++){
+				deltax = radius*Math.cos(radCount);
+				deltay = radius*Math.sin(radCount);
+				tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
+				storePoint(tempPoint);
+		        tempPoint = null;
+		        radCount+=radians;
+			}
+        }
+        else {
+			for(i=0; i<numSpokes; i++){
+				deltax = radius*Math.cos(radCount);
+				deltay = radius*Math.sin(radCount);
+				tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
+				storePoint(tempPoint);
+		        tempPoint = null;
+		        radCount+=radians;
+			}
+        }
+    }
+//	public void makeCircle(Point center, double radius, int numSpokes){
+//	      double deltax,deltay; 
+//	      double degCount=0;
+//	      double degree = (float) 360/numSpokes;
+//	      ring = new ArrayList<Point>();
+//	      Point tempPoint = null;
+//	      for(degCount=0; degCount<360; degCount+=degree){
+//	          deltax = radius*Math.cos(Math.toRadians(degCount));
+//	          deltay = radius*Math.sin(Math.toRadians(degCount));
+//	          tempPoint = new Point(center.getX() + deltax,center.getY() + deltay,0);
+//	          storePoint(tempPoint);
+//	          tempPoint = null;
+//	      }
+//	  }
     
     /**
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
