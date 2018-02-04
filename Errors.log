@@ -1,6 +1,0 @@
-Exception in thread "main" java.lang.IndexOutOfBoundsException: Index: 1, Size: 1
-	at java.util.ArrayList.rangeCheck(Unknown Source)
-	at java.util.ArrayList.get(Unknown Source)
-	at Boot.CircleGen.circleGeneration(CircleGen.java:42)
-	at Boot.Boot.setNewColor(Boot.java:138)
-	at Boot.Boot.main(Boot.java:68)
