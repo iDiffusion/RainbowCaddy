@@ -16,6 +16,7 @@ public class CircleGen {
 	public static double minY;
 	public static double maxY;
 	public static int numcircle;
+	public static double colorShift = 3;
 	
 	/**
 	 * @return Generates circles and fills in the colors based on change in elevation
@@ -57,6 +58,7 @@ public class CircleGen {
 		colorList.add(new Vector3d(125,0,205)); //Magenta
 		colorList.add(new Vector3d(0,0,255)); //Blue
 		colorList.add(new Vector3d(0,130,200)); //Pale Blue
+		
 		boolean done = false;
 		int count = 0;
 		double radius = 0;
@@ -82,7 +84,8 @@ public class CircleGen {
 			if(count == 0) {
 				for (Point p : points) {
 					if(insideRing(p,circles.get(count).ring)){
-						p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
+//						p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);// normal
+						p.setRGB((int)(colors.get(count).x/colorShift),(int)(colors.get(count).y/colorShift),(int)(colors.get(count).z/colorShift));//shifted
 					}
 				}
 			}
@@ -169,7 +172,7 @@ public class CircleGen {
 		double outerDistance = Math.sqrt((inner.getX()-color.getX())*(inner.getX()-color.getX())  +  (inner.getY()-color.getY())*(inner.getY()-color.getY()) + (inner.getZ()-color.getZ())*(inner.getZ()-color.getZ()));
 		double outerPercent = outerDistance/(innerDistance+outerDistance);
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
-		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
+		color.setRGB((int)(((outer.getR()*outerPercent)+(inner.getR()*innerPercent))/colorShift), (int)(((outer.getG()*outerPercent)+(inner.getG()*innerPercent))/colorShift), (int)(((outer.getB()*outerPercent)+(inner.getB()*innerPercent))/colorShift));
 	}
 	/**
 	 * @param point - Point to be looked for
