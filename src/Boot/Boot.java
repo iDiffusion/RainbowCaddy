@@ -129,8 +129,8 @@ public class Boot {
 					farthest = d;
 				}
 			}
-			int numCircle =  (int) Math.ceil((farthest/5));
-			CircleGen.circleGeneration(closestPoint, mesh.points, 540, numCircle);
+			int numCircle = ((int)CircleGen.distanceBetween(CircleGen.farthestNeighbor(closestPoint, mesh.points),closestPoint))/4;
+			CircleGen.circleGeneration(closestPoint, mesh.points, 180, numCircle);
 			
 			int currentColor = 255;
 			for (Point p : mesh.points) {

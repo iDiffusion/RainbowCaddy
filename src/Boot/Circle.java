@@ -124,7 +124,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return .75;
+        return 3;
     }
     
     /**

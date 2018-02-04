@@ -87,7 +87,7 @@ public class CircleGen {
 			else {
 				fillRings(points, circles.get(count).ring, circles.get(count-1).ring);
 			}
-			if(numCircle == count) {
+			if(numCircle+1 == count) {
 				for(Point p: tempBounds) {
 					p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
 				}
@@ -104,10 +104,7 @@ public class CircleGen {
 	 * @param count - circle you are generating
 	 */
 	private static void addColor(int count) {
-		if(count>=colorList.size()) {
-			count= count - colorList.size();
-		}
-		colors.add(colorList.get(count));
+		colors.add(colorList.get(count%5));
 	}
 	/**
 	 * @return Fills the rgb values of the points between the rings based on the color of the rings
@@ -150,9 +147,6 @@ public class CircleGen {
 						count++;
 					}
 				}
-				else if(ring.get(i).getY()==maxY||ring.get(i).getX()==maxX) {
-					return true;
-				}
 			}
 		}
 		if(count%2 == 1) {
@@ -176,7 +170,6 @@ public class CircleGen {
 		color.setRGB((int)((outer.getRGBAsArray()[0]*outerPercent)+(inner.getRGBAsArray()[0]*innerPercent)), (int)((outer.getRGBAsArray()[1]*outerPercent)+(inner.getRGBAsArray()[1]*innerPercent)), (int)((outer.getRGBAsArray()[2]*outerPercent)+(inner.getRGBAsArray()[2]*innerPercent)));
 	}
 	/**
-	 * 
 	 * @param point - Point to be looked for
 	 * @param points - Array to look for it in
 	 * @return - The point in the array that is closest to the point looking for
@@ -192,6 +185,11 @@ public class CircleGen {
 		}
 		return closest;
 	}
+    /**
+	 * @param point - Point in relation to farthest to be looked for
+	 * @param points - Array to look for it in
+	 * @return - The point in the array that is farthest to the point looking for
+	 */
     public static Point farthestNeighbor(Point point, ArrayList<Point> points) {
 		Point farthest = points.get(0);
 		double farthestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
@@ -203,4 +201,13 @@ public class CircleGen {
 		}
 		return farthest;
 	}
+    /**
+	 * @param p1 - first point
+	 * @param p2 - second point
+	 * @return - distance between 2 in 3d space
+	 */
+    public static double distanceBetween(Point p1, Point p2) {
+    	double distance = Math.sqrt(Math.pow(p1.getX()-p2.getX(),2) + Math.pow(p1.getY()-p2.getY(),2) +Math.pow(p1.getZ()-p2.getZ(),2));
+    	return distance;
+    }
 }
