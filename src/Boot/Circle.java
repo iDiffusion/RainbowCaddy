@@ -106,6 +106,9 @@ public class Circle {
 		ring = new ArrayList<Point>();
 		Point tempPoint = null;
 		for(int i = 0; i<numSpokes; i++) {
+			if(prev == null) {
+				radius =3;
+			}
 			deltax = radius * Math.cos(radCount);
 			deltay = radius * Math.sin(radCount);
 			if(prev != null) {

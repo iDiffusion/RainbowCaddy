@@ -16,7 +16,7 @@ public class CircleGen {
 	public static double minY;
 	public static double maxY;
 	public static int numcircle;
-	public static double colorShift = 3;
+	public static double colorShift = 2;
 	
 	/**
 	 * @return Generates circles and fills in the colors based on change in elevation
@@ -92,7 +92,7 @@ public class CircleGen {
 			else {
 				fillRings(points, circles.get(count).ring, circles.get(count-1).ring);
 			}
-			if(numCircle+1 == count) {
+			if(numCircle-1 == count) {
 				for(Point p: tempBounds) {
 					p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
 				}
