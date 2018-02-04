@@ -12,7 +12,7 @@ public class Circle {
 	 * Holds all the points in a ring
 	 */
 	public ArrayList<Point> ring;
-	
+	public int numCircle;
 	public ArrayList<Point> Bounds;
 	
 	/**
@@ -25,6 +25,7 @@ public class Circle {
 	 */
 	public Circle(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds, Circle prev) {
 		Bounds = bounds;
+		numCircle = CircleGen.numcircle;
 		makeCircle(prev,center,numSpokes);
 		assignHeights(points);
 		pushCircle(center, radius);
@@ -124,7 +125,7 @@ public class Circle {
      * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
      */
     private double coeff(){
-        return 3;
+        return 6/numCircle;
     }
     
     /**

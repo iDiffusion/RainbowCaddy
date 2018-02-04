@@ -130,7 +130,7 @@ public class Boot {
 				}
 			}
 			int numCircle = ((int)CircleGen.distanceBetween(CircleGen.farthestNeighbor(closestPoint, mesh.points),closestPoint))/4;
-			CircleGen.circleGeneration(closestPoint, mesh.points, 180, numCircle);
+			CircleGen.circleGeneration(closestPoint, mesh.points, 180, 6);
 			
 			int currentColor = 255;
 			for (Point p : mesh.points) {

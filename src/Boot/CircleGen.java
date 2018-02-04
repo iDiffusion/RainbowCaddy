@@ -15,6 +15,7 @@ public class CircleGen {
 	public static double maxX;
 	public static double minY;
 	public static double maxY;
+	public static int numcircle;
 	
 	/**
 	 * @return Generates circles and fills in the colors based on change in elevation
@@ -25,6 +26,7 @@ public class CircleGen {
 	 */
 	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
 		ArrayList<Point> bounds  = new ArrayList<Point>();
+		numcircle = numCircle;
 		if(bounds.isEmpty()) {
 			minX = points.get(0).getX();
 			minY = points.get(0).getY();
