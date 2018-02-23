@@ -115,24 +115,10 @@ public class Boot {
 			//------ADJUST THOSE POINTS (TEMP FIX)-----------
 			x -= 3; y += 5;
 			
-			Point closestPoint = CircleGen.nearestNeighbor(new Point(x,y), mesh.points);
+			Point closestPoint = CircleColor.nearestNeighbor(new Point(x,y), mesh.points);
+			CircleColor.circleColor(closestPoint, mesh.points, 180);
 			
-			double nearest[] = {
-					Math.abs(mesh.minX - closestPoint.getX()),
-					Math.abs(mesh.minY - closestPoint.getY()),
-					Math.abs(mesh.maxX - closestPoint.getX()),
-					Math.abs(mesh.maxY - closestPoint.getY())
-			};
-			double farthest = mesh.maxX;
-			for(double d : nearest) {
-				if(d>farthest) {
-					farthest = d;
-				}
-			}
-			int numCircle = ((int)CircleGen.distanceBetween(CircleGen.farthestNeighbor(closestPoint, mesh.points),closestPoint))/4;
-			CircleGen.circleGeneration(closestPoint, mesh.points, 180, 6);
-			
-			int currentColor = 255;
+			int currentColor = 0;
 			for (Point p : mesh.points) {
 				if (p.getX() > closestPoint.x - err && p.getX() < closestPoint.x + err &&
 					p.getY() > closestPoint.y - err && p.getY() < closestPoint.y + err) {
