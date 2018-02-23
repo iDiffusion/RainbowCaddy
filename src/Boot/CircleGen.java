@@ -1,218 +1,174 @@
 package Boot;
+
+import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JColorChooser;
+import java.util.concurrent.locks.*;
 import javax.vecmath.Vector3d;
 
 /**
  * Date Created: Dec 18, 2017
- * @author Eli Rhyne
  * @author Liam Marshall 
+ * @author Eli Rhyne
  */
 
-public class CircleGen {
-	public static ArrayList<Vector3d> colorList  = new ArrayList<Vector3d>();
-	public static ArrayList<Vector3d> colors  = new ArrayList<Vector3d>();
-	public static double minX;
-	public static double maxX;
-	public static double minY;
-	public static double maxY;
-	public static int numcircle;
-	public static double colorShift = 2;
+public class CircleGen implements Runnable{
+
+	public ArrayList<Point> Bounds;
+	public static ArrayList<Color> colors = new ArrayList<Color>();
+	ReentrantLock lock = new ReentrantLock();
+
+	/**
+	 * @author earhy
+	 * 
+	 * @return an array of circles
+	 * @param radius - the distance from the center point
+	 * @param center - contains the X,Y,Z points of the center
+	 * @param numSpokes - the number of spokes to draw points on
+	 * @param points - a list of the object files points
+	 * @param prev - Previous Circle made
+	 * @param bounds - A two point array containing the largest and smallest points
+	 * 
+	 */
+	public Circle[] createCircles(double radius, Point center, int numSpokes, ArrayList<Point> points, ArrayList<Point> bounds, Circle prev) {
+		Circle[] circles = null;
+		if(colors.isEmpty()) addColors();
+		Bounds = bounds;
+		
+		return circles;
+	}
+	
 	
 	/**
-	 * @return Generates circles and fills in the colors based on change in elevation
-	 * @param center - Center of the rings to be created
-	 * @param points - ArrayList of all the points in the mesh to be colored
-	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
-	 * @param numCircle - Number of circle to make 
+	 * @author earhy
+	 * 
+	 * Prompts the user to add colors
 	 */
-	public static void circleGeneration(Point center, ArrayList<Point> points, int spokes, int numCircle){
-		ArrayList<Point> bounds  = new ArrayList<Point>();
-		numcircle = numCircle;
-		if(bounds.isEmpty()) {
-			minX = points.get(0).getX();
-			minY = points.get(0).getY();
-			maxX = points.get(0).getX();
-			maxY = points.get(0).getY();
-			for(Point p : points) {
-				if (p.getX() < minX) {
-					minX = p.getX();
-				} 
-				if (p.getX() > maxX) {
-					maxX = p.getX();
-				}
-				if (p.getY() < minY) {
-					minY = p.getY();
-				}
-				if (p.getY() > maxY) {
-					maxY = p.getY();
-				}
-			}
-			bounds.add(new Point(maxX,maxY));
-			bounds.add(new Point(minX,minY));
+	private void addColors() {
+		Color color = Color.LIGHT_GRAY;
+		for(int i =0; i<4; i++) {
+			colors.add(JColorChooser.showDialog( null,"Choose a color", color ));
 		}
-		System.out.println("Center X:" + center.getX() + " Y:" + center.getY() +"\n");
-		System.out.println("Bounds: \nX Max: " + bounds.get(0).getX() + " Y Max: " + bounds.get(0).getY() +"\nX Min: " + bounds.get(1).getX() + " Y Min: " + bounds.get(1).getY() + "\n");
-		colorList.add(new Vector3d(0,255,0)); //Green
-		colorList.add(new Vector3d(150,175,0)); //Yellow
-		colorList.add(new Vector3d(255,0,0)); //Red
-		colorList.add(new Vector3d(125,0,205)); //Magenta
-		colorList.add(new Vector3d(0,0,255)); //Blue
-		colorList.add(new Vector3d(0,130,200)); //Pale Blue
 		
-		boolean done = false;
-		int count = 0;
-		double radius = 0;
-		ArrayList<Circle> circles = new ArrayList<Circle>();
-		ArrayList<Point> tempBounds = new ArrayList<Point>();
-		tempBounds.add(new Point(maxX+3,maxY+3));
-		tempBounds.add(new Point(maxX+3,minY-3));
-		tempBounds.add(new Point(minX-3,minY-3));
-		tempBounds.add(new Point(minX-3,maxY+3)); 
-		while(!done) {
-			addColor(count);
-			radius+=5;
-			if(count!=0) {
-				circles.add(new Circle(radius, center, spokes, points, bounds, circles.get(count-1)));
-			}
-			else {
-				circles.add(new Circle(radius, center, spokes, points, bounds, null));
-			}
-			for(Point p : circles.get(count).ring) {
-				p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
-				nearestNeighbor(p,points).setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
-			}
-			if(count == 0) {
-				for (Point p : points) {
-					if(insideRing(p,circles.get(count).ring)){
-//						p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);// normal
-						p.setRGB((int)(colors.get(count).x/colorShift),(int)(colors.get(count).y/colorShift),(int)(colors.get(count).z/colorShift));//shifted
-					}
-				}
-			}
-			else {
-				fillRings(points, circles.get(count).ring, circles.get(count-1).ring);
-			}
-			if(numCircle-1 == count) {
-				for(Point p: tempBounds) {
-					p.setRGB((int)colors.get(count).x,(int)colors.get(count).y,(int)colors.get(count).z);
-				}
-				fillRings(points, tempBounds, circles.get(count).ring);
-				done = true;
-			}
-			count++;
-			System.out.print("Circle Number: " + count + "\n");
-		}
-		System.out.println("Finished");
 	}
-	/**
-	 * @return Fills the colors list dynamically for all numbers and sizes of color arrays
-	 * @param count - circle you are generating
-	 */
-	private static void addColor(int count) {
-		colors.add(colorList.get(count%5));
-	}
-	/**
-	 * @return Fills the rgb values of the points between the rings based on the color of the rings
-	 * @param points - ArrayList of all points
-	 * @param ring1 - ArrayList of the outer ring
-	 * @param ring2 - ArrayList of the inner ring
-	 */
-	public static void fillRings(ArrayList<Point> points, ArrayList<Point> ring1, ArrayList<Point> ring2) {
-		Point outerRing;
-		Point innerRing;
-		for (Point p : points) {
-			if(insideRing(p, ring1) && !insideRing(p, ring2)){
-				outerRing = nearestNeighbor(p, ring1);
-				innerRing = nearestNeighbor(p, ring2);
-				outerRing.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
-				innerRing.setRGB(ring2.get(0).getR(), ring2.get(0).getG(), ring2.get(0).getB());
-				genColor(outerRing, innerRing, p);
-			}			
-		}
-	}
+
+
 	/**
 	 * 
-	 * @param point - Point to be tested
-	 * @param ring - Ring that the point is relative to
-	 * @return Returns 1 if a point is inside of a ring, and 0 if it is outside
+	 * @author earhy
+	 * Stores the point within bounds of the ArrayList
+	 * @param point - Point to be stored 
+	 * @param circle - Pointer to the circle being worked with
 	 */
-	private static boolean insideRing(Point point, ArrayList<Point> ring) { 
-		int count = 0;
-		int item;
-		for(int i = 0; i < ring.size(); i++) {
-			item = ((i+1) == ring.size()) ? 0 : i+1;
-			if((ring.get(item).getX()>point.getX())&&(ring.get(i).getX()>point.getX())) {
-				if(ring.get(i).getY() > ring.get(item).getY()) {  // if slant down
-					if(((ring.get(item).getY() <= point.getY()) && (ring.get(i).getY() >= point.getY()))) {
-						count++;
-					}
-				}
-				else if(ring.get(i).getY() < ring.get(item).getY()) { //if slant up
-					if(((ring.get(item).getY() >= point.getY()) && (ring.get(i).getY() <= point.getY()))) {
-						count++;
-					}
-				}
+	private void storePoint(Point point, Circle circle) {
+		if(((point.getX()<=Bounds.get(0).getX())&&(point.getX()>=Bounds.get(1).getX()))&&((point.getY()<=Bounds.get(0).getY())&&(point.getY()>=Bounds.get(1).getY()))){
+			circle.add(point);
+		}
+		else if((point.getX()>=Bounds.get(0).getX())){ // Above Upper X
+			if((point.getY()>Bounds.get(0).getY())){//Above Upper Y and Above X
+				point.setX(Bounds.get(0).getX());
+				point.setY(Bounds.get(0).getY());
+				circle.add(point);
+			}
+			else if((point.getY()<Bounds.get(1).getY())){//Below Lower Y and above X
+				point.setX(Bounds.get(0).getX());
+				point.setY(Bounds.get(1).getY());
+				circle.add(point);
+			}
+			else {//Just X condition
+				point.setX(Bounds.get(0).getX());
+				circle.add(point);
 			}
 		}
-		if(count%2 == 1) {
-			return true;
+		else if((point.getX()<=Bounds.get(1).getX())){ // Below Lower X
+			if((point.getY()>=Bounds.get(0).getY())){//Above Upper Y and below X
+				point.setX(Bounds.get(1).getX());
+				point.setY(Bounds.get(0).getY());
+				circle.add(point);
+			}
+			else if((point.getY()<=Bounds.get(1).getY())){//Below Lower Y and X
+				point.setX(Bounds.get(1).getX());
+				point.setY(Bounds.get(1).getY());
+				circle.add(point);
+			}
+			else {//Just X condition
+				point.setX(Bounds.get(1).getX());
+				circle.add(point);
+			}
 		}
-		else {
-			return false;
+		else { // X is fine
+			if((point.getY()>=Bounds.get(0).getY())){ //Above Upper Y 
+				point.setY(Bounds.get(0).getY());
+				circle.add(point);
+			}
+			else if((point.getY()<=Bounds.get(1).getY())){//Below Lower Y
+				point.setY(Bounds.get(1).getY());
+				circle.add(point);
+			}
 		}
 	}
+	
 	/**
-	 * @return Generates a color proportional to the distance of the point to the inner and outer rings
-	 * @param outer - Outer Ring Point
-	 * @param inner - Inner Ring Point
-	 * @param color - Point to be colored
+	 * Generate points along a set number of spokes for a circle of a given radius 
+	 * @param prev - Previous circle
+	 * @param radius - the distance from the center point
+	 * @param numSpokes - the number of spokes to draw point on
+	 * @param count - the spoke being worked on
+	 * @param circle - The Circle being made
 	 */
-	private static void genColor(Point outer, Point inner, Point color) {
-		double innerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
-		double outerDistance = Math.sqrt((inner.getX()-color.getX())*(inner.getX()-color.getX())  +  (inner.getY()-color.getY())*(inner.getY()-color.getY()) + (inner.getZ()-color.getZ())*(inner.getZ()-color.getZ()));
-		double outerPercent = outerDistance/(innerDistance+outerDistance);
-		double innerPercent = innerDistance/(innerDistance+outerDistance);
-		color.setRGB((int)(((outer.getR()*outerPercent)+(inner.getR()*innerPercent))/colorShift), (int)(((outer.getG()*outerPercent)+(inner.getG()*innerPercent))/colorShift), (int)(((outer.getB()*outerPercent)+(inner.getB()*innerPercent))/colorShift));
-	}
-	/**
-	 * @param point - Point to be looked for
-	 * @param points - Array to look for it in
-	 * @return - The point in the array that is closest to the point looking for
-	 */
-    public static Point nearestNeighbor(Point point, ArrayList<Point> points) {
-		Point closest = points.get(0);
-		double closestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
-		for(Point p : points) {
-			if( closestDis >= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())))) {
-				closestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())));
-				closest = p;
-			}
-		}
-		return closest;
-	}
-    /**
-	 * @param point - Point in relation to farthest to be looked for
-	 * @param points - Array to look for it in
-	 * @return - The point in the array that is farthest to the point looking for
-	 */
-    public static Point farthestNeighbor(Point point, ArrayList<Point> points) {
-		Point farthest = points.get(0);
-		double farthestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
-		for(Point p : points) {
-			if( farthestDis <= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())))) {
-				farthestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())));
-				farthest = p;
-			}
-		}
-		return farthest;
-	}
-    /**
-	 * @param p1 - first point
-	 * @param p2 - second point
-	 * @return - distance between 2 in 3d space
-	 */
-    public static double distanceBetween(Point p1, Point p2) {
-    	double distance = Math.sqrt(Math.pow(p1.getX()-p2.getX(),2) + Math.pow(p1.getY()-p2.getY(),2) +Math.pow(p1.getZ()-p2.getZ(),2));
-    	return distance;
+	public void makePoint(Point prev, int numSpokes, double radius, int count, Circle circle){
+		double radian =  count*(2.0 * Math.PI)/(double)numSpokes;
+		double deltax,deltay;
+		deltax = radius * Math.cos(radian);
+		deltay = radius * Math.sin(radian);
+		Point t = new Point(prev.getX() + deltax, prev.getY() + deltay);
+		storePoint(t,circle);
+		t = null;
+		return;
     }
+	
+    /**
+     * @return a coefficient used when swaying the circle to generate a more intuitive heat-map
+     */
+    private double coeff(){
+        return 8;
+    }
+    
+    /**
+     * Snaps created points to existing points
+     * @param points
+     */
+    private void assignHeights(ArrayList<Point> points, Circle circle) {
+        for(Point p : circle.getRing()) {
+        	p.setZ(CircleColor.nearestNeighbor(p, points).getZ());
+        }
+    }
+    
+    /**
+     * sways the circle based on the change in elevation between the point on the spoke and the center
+     * @param radius - the distance from the center point
+	 * @param center - contains the X,Y,Z points of the center
+     */
+    private void pushCircle (Point center, double radius, Circle c, int count, int numSpokes){
+        double deltaz;
+        Point temp = new Point(0,0,0);
+        deltaz = center.getZ() - c.get(count).getZ();
+        temp.setXYZ((c.get(count).getX() + deltaz * coeff() * ((c.get(count).getX() - center.getX()) / radius)),
+        			(c.get(count).getY() + deltaz * coeff() * ((c.get(count).getY() - center.getY()) / radius)),0);
+        if(!(( Bounds.get(1).getX() == c.get(count).getX()) ||
+        		( Bounds.get(1).getX() == c.get(count).getX() ) ||
+        		( Bounds.get(0).getY() == c.get(count).getY() ) ||
+        		( Bounds.get(0).getY() == c.get(count).getY() ))) {
+        	c.setPoint(count , temp);
+        }
+    } 
+
+
+	@Override
+	public void run() {
+		lock.lock();
+
+		
+		lock.unlock();
+	}    
 }
