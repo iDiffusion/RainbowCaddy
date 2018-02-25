@@ -1,5 +1,6 @@
 package Boot;
 import java.util.ArrayList;
+import java.awt.Color;
 
 /**
  * Date Created: Feb 22, 2018
@@ -10,11 +11,26 @@ public class Circle {
 	/**
 	 * Holds all the points in a ring
 	 */
-	public ArrayList<Point> ring;
-	public static double radius;
-	public static int count;
-	public static Point center;
+	private ArrayList<Point> ring;
+	private double radius;
+	private int count;
+	private Point center;
+	private Color color;
 	
+	public Circle() {
+		this.ring = new ArrayList<Point>();
+		this.radius = 0.0;
+		this.count = 0;
+		this.center = new Point(0,0);
+		this.setColor(null);
+	}
+	public Circle(Point center , double radius, int count, Color c) {
+		this.ring = new ArrayList<Point>();
+		this.radius = radius;
+		this.count = count;
+		this.center = center;
+		this.color = c;
+	}
 	/**
 	 * @return a list of points that make up the ring
 	 */
@@ -30,7 +46,7 @@ public class Circle {
     }
 	
 	/**
-	 * @param a point to be added
+	 * @param a point to be gotten
 	 */
 	public Point get(int i){
         return ring.get(i);
@@ -84,5 +100,11 @@ public class Circle {
 	 */
 	public Point getCenter() {
 		return center;
+	}
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }
