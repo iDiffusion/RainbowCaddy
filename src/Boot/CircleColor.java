@@ -14,9 +14,7 @@ public class CircleColor {
 	public static double maxX;
 	public static double minY;
 	public static double maxY;
-	public static double colorShift = 1;
-	public static double modulate = .5;
-	public static ArrayList<Circle> circles = new ArrayList<Circle>();
+	public static double modulate = .75;
 	
 	/**
 	 * @return Generates circles and fills in the colors based on change in elevation
@@ -25,13 +23,15 @@ public class CircleColor {
 	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
 	 */
 	public static void circleColor(Point center, ArrayList<Point> points, int spokes){	
-		System.out.println("Finding bounds for this green");
+		System.out.println("\n\n\nFinding bounds for this green:");
 		
 		ArrayList<Point> bounds  = new ArrayList<Point>();
+		
 		minX = points.get(0).getX();
 		minY = points.get(0).getY();
 		maxX = points.get(0).getX();
 		maxY = points.get(0).getY();
+		
 		for(Point p : points) {
 			if (p.getX() < minX) {
 				minX = p.getX();
@@ -46,45 +46,67 @@ public class CircleColor {
 				maxY = p.getY();
 			}
 		}
+		
 		bounds.add(new Point(maxX,maxY));
 		bounds.add(new Point(minX,minY));
 		
-		System.out.println("Center X:" + center.getX() + " Y:" + center.getY());
-		System.out.println("Bounds: \nX Max: " + bounds.get(0).getX() + " Y Max: " + bounds.get(0).getY() +"\nX Min: " + bounds.get(1).getX() + " Y Min: " + bounds.get(1).getY() + "\n");
+		System.out.println("\tCenter X:" + center.getX() + " Y:" + center.getY());
+		System.out.println("\tBounds: \n\tX Max: " + bounds.get(0).getX() + " Y Max: " +
+						   bounds.get(0).getY() +"\n\tX Min: " +
+						   bounds.get(1).getX() + " Y Min: " +
+						   bounds.get(1).getY() + "\n");
+		
 		ArrayList<Point> tempBounds = new ArrayList<Point>();
+		
 		tempBounds.add(new Point(maxX+3,maxY+3));
 		tempBounds.add(new Point(maxX+3,minY-3));
 		tempBounds.add(new Point(minX-3,minY-3));
 		tempBounds.add(new Point(minX-3,maxY+3)); 
-		System.out.println("Making Circles");
 		
-		for(int i = 0; i < circles.size(); i++) {
-			if(i==0) {
+		System.out.println("Making Circles...");
+		
+		Circle[] circles = CircleGen.createCircles(center, spokes, points, bounds);
+		
+		System.out.println("\nCircles Done: Coloring Circles...");
+		
+		for(Circle c: circles) {
+			if(c.getCount()==0) {
 				for(Point p: points) {
-					if(insideRing(p, circles.get(i).ring)) {
-						p.setRGB((int)(circles.get(i).getRing().get(0).getR()*colorShift), 
-								 (int)(circles.get(i).getRing().get(0).getB()*colorShift),
-								 (int)(circles.get(i).getRing().get(0).getB()*colorShift));
+					if(insideRing(p,c)) {
+						p.setColor(c.getColor(),modulate);
 					}
 				}
-				System.out.println("Filled Ring 1");
+			}
+			else if(c.getCount()!=circles.length-1) {
+				fillRings(points, c, circles[c.getCount()-1]);
 			}
 			else {
-				fillRings(points, circles.get(i).getRing(), circles.get(i-1).getRing());
-				System.out.println("Filled Ring "+ (i+1));
+				fillRings(points, c, circles[c.getCount()-1]);
+				for(Point p: points) {
+					if(!insideRing(p,c)) {
+						p.setColor(c.getColor(),modulate);
+					}
+				}
 			}
 		}
-		for(Point p: points) {
-			if(!insideRing(p, circles.get(circles.size()-1).ring)) {
-				p.setRGB((int)(circles.get(circles.size()-1).getRing().get(0).getR()*colorShift), 
-						 (int)(circles.get(circles.size()-1).getRing().get(0).getB()*colorShift),
-						 (int)(circles.get(circles.size()-1).getRing().get(0).getB()*colorShift));
-			}
-		}
+		
 		bounds = new ArrayList<Point>();
 		tempBounds = null;
-		circles = new ArrayList<Circle>();
-		System.out.println("Finished");
+//		double err = .25;
+//		int counter = 4;
+//		for(Circle c: circles) {
+//			for(Point closestPoint: c.getRing()) {
+//				for(Point p: points) {
+//					if (p.getX() > closestPoint.x - err && p.getX() < closestPoint.x + err &&
+//							p.getY() > closestPoint.y - err && p.getY() < closestPoint.y + err) {
+//							p.setColor(circles[counter].getColor());
+//					}
+//				}
+//			}
+//			counter--;
+//		}
+		circles = new Circle[5];
+		System.out.println("Finished!");
 	}
 	/**
 	 * @return Fills the rgb values of the points between the rings based on the color of the rings
@@ -92,21 +114,18 @@ public class CircleColor {
 	 * @param ring1 - ArrayList of the outer ring
 	 * @param ring2 - ArrayList of the inner ring
 	 */
-	public static void fillRings(ArrayList<Point> points, ArrayList<Point> ring1, ArrayList<Point> ring2) {
+	public static void fillRings(ArrayList<Point> points, Circle c1, Circle c2) {
 		Point outerRing;
 		Point innerRing;
 		for (Point p : points) {
-			if(insideRing(p, ring1) && !insideRing(p, ring2)){
-				outerRing = nearestNeighbor(p, ring1);
-				innerRing = nearestNeighbor(p, ring2);
-				outerRing.setRGB(ring1.get(0).getR(), ring1.get(0).getG(), ring1.get(0).getB());
-				innerRing.setRGB(ring2.get(0).getR(), ring2.get(0).getG(), ring2.get(0).getB());
+			if(insideRing(p, c1) && !insideRing(p, c2)){
+				outerRing = nearestNeighbor(p, c1.getRing());
+				innerRing = nearestNeighbor(p, c2.getRing());
+				outerRing.setColor(c1.getColor(),modulate);
+				innerRing.setColor(c2.getColor(),modulate);
 				genColor(outerRing, innerRing, p);
 			}			
 		}
-	}
-	public static void addCircle(Circle c) {
-		circles.add(c);
 	}
 	/**
 	 * 
@@ -114,9 +133,10 @@ public class CircleColor {
 	 * @param ring - Ring that the point is relative to
 	 * @return Returns 1 if a point is inside of a ring, and 0 if it is outside
 	 */
-	private static boolean insideRing(Point point, ArrayList<Point> ring) { 
+	private static boolean insideRing(Point point, Circle c) { 
 		int count = 0;
 		int item;
+		ArrayList<Point> ring = c.getRing();
 		for(int i = 0; i < ring.size(); i++) {
 			item = ((i+1) == ring.size()) ? 0 : i+1;
 			if((ring.get(item).getX()>point.getX())&&(ring.get(i).getX()>point.getX())) {
@@ -146,11 +166,20 @@ public class CircleColor {
 	 * @param color - Point to be colored
 	 */
 	private static void genColor(Point outer, Point inner, Point color) {
-		double innerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
-		double outerDistance = Math.sqrt((inner.getX()-color.getX())*(inner.getX()-color.getX())  +  (inner.getY()-color.getY())*(inner.getY()-color.getY()) + (inner.getZ()-color.getZ())*(inner.getZ()-color.getZ()));
+		double innerDistance = Math.sqrt((outer.getX()-color.getX())*(outer.getX()-color.getX())  +
+										  (outer.getY()-color.getY())*(outer.getY()-color.getY()) + 
+										  (outer.getZ()-color.getZ())*(outer.getZ()-color.getZ()));
+		
+		double outerDistance = Math.sqrt((inner.getX()-color.getX())*(inner.getX()-color.getX()) +
+										 (inner.getY()-color.getY())*(inner.getY()-color.getY()) + 
+										 (inner.getZ()-color.getZ())*(inner.getZ()-color.getZ()));
+		
 		double outerPercent = outerDistance/(innerDistance+outerDistance);
 		double innerPercent = innerDistance/(innerDistance+outerDistance);
-		color.setRGB((int)(((outer.getR()*outerPercent)+(inner.getR()*innerPercent))), (int)(((outer.getG()*outerPercent)+(inner.getG()*innerPercent))), (int)(((outer.getB()*outerPercent)+(inner.getB()*innerPercent))));
+		
+		color.setRGB((int)(((outer.getR()*outerPercent)+(inner.getR()*innerPercent))), 
+					 (int)(((outer.getG()*outerPercent)+(inner.getG()*innerPercent))), 
+					 (int)(((outer.getB()*outerPercent)+(inner.getB()*innerPercent))));
 	}
 	/**
 	 * @param point - Point to be looked for
@@ -159,10 +188,16 @@ public class CircleColor {
 	 */
     public static Point nearestNeighbor(Point point, ArrayList<Point> points) {
 		Point closest = points.get(0);
-		double closestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
+		double closestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) +
+									 ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
 		for(Point p : points) {
-			if( closestDis >= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())))) {
-				closestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())));
+			if( closestDis >= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) +
+									   ((p.getY()-point.getY())*(p.getY()-point.getY())))) 
+			{
+				
+				closestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) +
+									  ((p.getY()-point.getY())*(p.getY()-point.getY())));
+				
 				closest = p;
 			}
 		}
@@ -175,10 +210,14 @@ public class CircleColor {
 	 */
     public static Point farthestNeighbor(Point point, ArrayList<Point> points) {
 		Point farthest = points.get(0);
-		double farthestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) + ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
+		double farthestDis = Math.sqrt((points.get(0).getX()-point.getX())*(points.get(0).getX()-point.getX()) +
+									  ((points.get(0).getY()-point.getY())*(points.get(0).getY()-point.getY())));
 		for(Point p : points) {
-			if( farthestDis <= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())))) {
-				farthestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) + ((p.getY()-point.getY())*(p.getY()-point.getY())));
+			if( farthestDis <= Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) +
+										((p.getY()-point.getY())*(p.getY()-point.getY())))) 
+			{
+				farthestDis = Math.sqrt((p.getX()-point.getX())*(p.getX()-point.getX()) +
+									   ((p.getY()-point.getY())*(p.getY()-point.getY())));
 				farthest = p;
 			}
 		}
@@ -190,7 +229,9 @@ public class CircleColor {
 	 * @return - distance between 2 in 3d space
 	 */
     public static double distanceBetween(Point p1, Point p2) {
-    	double distance = Math.sqrt(Math.pow(p1.getX()-p2.getX(),2) + Math.pow(p1.getY()-p2.getY(),2) +Math.pow(p1.getZ()-p2.getZ(),2));
+    	double distance = Math.sqrt(Math.pow(p1.getX()-p2.getX(),2) + 
+    								Math.pow(p1.getY()-p2.getY(),2) +
+    								Math.pow(p1.getZ()-p2.getZ(),2));
     	return distance;
     }
 }

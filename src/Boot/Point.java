@@ -1,6 +1,7 @@
 package Boot;
 
 import javax.vecmath.Vector3d;
+import java.awt.Color;
 
 /**
  * A point object holds x, y, z values as well as r, g, b values.
@@ -225,6 +226,12 @@ public class Point implements Comparable<Point> {
 	 */
 	public int getB() {
 		return this.b;
+	}
+	
+	public void setColor(Color c, double mod) {
+		this.r = (int) (c.getRed()*mod);
+		this.g = (int) (c.getGreen()*mod);
+		this.b = (int) (c.getBlue()*mod);
 	}
 	
 	/**
