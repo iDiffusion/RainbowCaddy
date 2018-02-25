@@ -116,7 +116,7 @@ public class Boot {
 			x -= 3; y += 5;
 			
 			Point closestPoint = CircleColor.nearestNeighbor(new Point(x,y), mesh.points);
-			CircleColor.circleColor(closestPoint, mesh.points, 180);
+			CircleColor.circleColor(closestPoint, mesh.points, 720);
 			
 			int currentColor = 0;
 			for (Point p : mesh.points) {
