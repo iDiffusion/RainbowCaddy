@@ -21,6 +21,7 @@ public class CircleColor {
 	 * @param center - Center of the rings to be created
 	 * @param points - ArrayList of all the points in the mesh to be colored
 	 * @param spokes - Number of spokes to generate the circle Higher = more accuracy
+	 * @throws InterruptedException 
 	 */
 	public static void circleColor(Point center, ArrayList<Point> points, int spokes){	
 		System.out.println("\n\n\nFinding bounds for this green:");
@@ -69,22 +70,33 @@ public class CircleColor {
 		
 		System.out.println("\nCircles Done: Coloring Circles...");
 		
+		Thread[] threads = new Thread[Runtime.getRuntime().availableProcessors()];
+		
 		for(Circle c: circles) {
 			if(c.getCount()==0) {
-				for(Point p: points) {
-					if(insideRing(p,c)) {
-						p.setColor(c.getColor(),modulate);
+				for (int i = 0; i < threads.length; i++) {
+				    threads[i] = new Thread(new inside(points,c,i));
+				    threads[i].start();
+				    try {
+						threads[i].join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			}
 			else if(c.getCount()!=circles.length-1) {
-				fillRings(points, c, circles[c.getCount()-1]);
+				threads[c.getCount()] = new Thread(new fill(points, c, circles[c.getCount()-1],c.getCount()));
+				threads[c.getCount()].start();
 			}
 			else {
 				fillRings(points, c, circles[c.getCount()-1]);
-				for(Point p: points) {
-					if(!insideRing(p,c)) {
-						p.setColor(c.getColor(),modulate);
+				for (int i = 0; i < threads.length; i++) {
+				    threads[i] = new Thread(new outside(points,c,i));
+				    threads[i].start();
+				    try {
+						threads[i].join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -133,7 +145,7 @@ public class CircleColor {
 	 * @param ring - Ring that the point is relative to
 	 * @return Returns 1 if a point is inside of a ring, and 0 if it is outside
 	 */
-	private static boolean insideRing(Point point, Circle c) { 
+	public static boolean insideRing(Point point, Circle c) { 
 		int count = 0;
 		int item;
 		ArrayList<Point> ring = c.getRing();
@@ -236,3 +248,61 @@ public class CircleColor {
     }
 }
 
+class inside implements Runnable{
+	public ArrayList<Point> points;
+	public Circle c;
+	int threadNum;
+	inside(ArrayList<Point> P, Circle circle, int i) {
+		points = P;
+		c = circle;
+		threadNum = i;
+	}
+	@Override
+	public void run() {
+		System.out.println("\tStarting Inside Test Thread number " + (threadNum+1) + " of "+ (Runtime.getRuntime().availableProcessors()));
+		int processorNum = Runtime.getRuntime().availableProcessors();
+		for(int i = threadNum; i<points.size(); i=i+processorNum) {
+			if(CircleColor.insideRing(points.get(i),c)) {
+				points.get(i).setColor(c.getColor(),CircleColor.modulate);
+			}
+		}
+	}	
+	
+}
+class outside implements Runnable{
+	public ArrayList<Point> points;
+	public Circle c;
+	int threadNum;
+	outside(ArrayList<Point> P, Circle circle, int i) {
+		points = P;
+		c = circle;
+		threadNum = i;
+	}
+	@Override
+	public void run() {
+		System.out.println("\tStarting Outside Test Thread number " + (threadNum+1) + " of "+ (Runtime.getRuntime().availableProcessors()));
+		int processorNum = Runtime.getRuntime().availableProcessors();
+		for(int i = threadNum; i<points.size(); i=i+processorNum) {
+			if(!CircleColor.insideRing(points.get(i),c)) {
+				points.get(i).setColor(c.getColor(),CircleColor.modulate);
+			}
+		}
+	}
+}
+class fill implements Runnable{
+	public ArrayList<Point> points;
+	public Circle c1;
+	public Circle c2;
+	int threadNum;
+	fill(ArrayList<Point> p, Circle r1,Circle r2, int i) {
+		points = p;
+		c1 = r1;
+		c2 = r2;
+		threadNum = i;
+	}
+	@Override
+	public void run() {
+		System.out.println("\tStarting Fill Thread number " + (threadNum+1) + " of "+ (Runtime.getRuntime().availableProcessors()));
+		CircleColor.fillRings(points, c1, c2);
+	}	
+}
