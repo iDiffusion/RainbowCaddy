@@ -20,25 +20,38 @@ import org.newdawn.slick.util.ResourceLoader;
 public class DisplayManager {
 	private static int WIDTH = 640;
 	private static int HEIGHT = 420;
-	private static final int FPS_MAX = 120;
+	private static int FPS_MAX = 120;
 	private static int x = 0;
 	private static int y = 0;
+
 	public static void createDisplay() {
-		createDisplay(WIDTH, HEIGHT);
-	}
-	public static void createDisplay(int width, int height) {
-		WIDTH = width;
-		HEIGHT = height;
+
 		ContextAttribs attribs = new ContextAttribs(3,2)
 		.withForwardCompatible(true)
 		.withProfileCore(true);
 		
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.setResizable(true);
+			int biggestWidth = 0;
+			int biggestHeight = 0;
+			int fastest = 0;
+			DisplayMode mode = new DisplayMode(0,0);
+			DisplayMode[] modes = Display.getAvailableDisplayModes();
+			for(DisplayMode d: modes) {
+				if(d.getHeight()>biggestHeight) {biggestHeight =  d.getHeight();}
+				if(d.getWidth()>biggestWidth) {biggestWidth = d.getWidth();}
+				if(d.getFrequency()>fastest) {fastest =  d.getFrequency();}
+				if(d.getFrequency()==fastest&&d.getWidth()==biggestWidth&&d.getHeight()==biggestHeight) {
+					mode = d;
+				}
+			}
+			HEIGHT = mode.getHeight();
+			WIDTH = mode.getWidth()-118;
+			FPS_MAX = mode.getFrequency();
+			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			x = Display.getX();
+			x = Display.getX()-61;
 			y = Display.getY();
+			Display.setLocation(x, y);
 			Display.setTitle("Rainbow Caddy");
 			
 			

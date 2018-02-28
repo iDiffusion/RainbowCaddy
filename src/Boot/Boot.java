@@ -30,7 +30,7 @@ public class Boot {
 
 	public static void main(String[] args) {
 		logErrorsToFile("Errors.log");
-		DisplayManager.createDisplay(1000, 700);
+		DisplayManager.createDisplay();
 		initalize();
 		//-------------POPUP TELLING USER MESH IS LOADING------------
 		Error_Popup firstPop = new Error_Popup("LOADING", "Please wait as the mesh is loaded", 0, 0, false);
@@ -57,6 +57,15 @@ public class Boot {
 		
 		//-------REMOVE LOADING MESSAGE-------------
 		firstPop.dispose();
+
+		renderer.prepare();
+		shader.start();
+		shader.loadViewMatrix(camera);
+		renderer.render(entity, shader);
+		shader.stop();
+		DisplayManager.updateDisplay();
+		frame.setLocation(DisplayManager.getX() + DisplayManager.getWidth(), DisplayManager.getY());
+		
 		
 		//----------MAIN LOOP----------------
 		while(!Display.isCloseRequested()) {
@@ -95,7 +104,7 @@ public class Boot {
 		DisplayManager.closeDisplay();//close display
 		
 	}
-	
+
 	public static Entity setNewColor(Camera camera, MousePicker mousePicker, OBJLoader objLoader, Loader loader, Entity entity) {
 		//----CONSOLE FOR DEBUGGING----------
 		System.out.println("Loading New Color");
@@ -143,7 +152,7 @@ public class Boot {
 	 */
 	public static void initalize() {
 		//-------SETUP AND SET LOCATION----------
-		frame.setSize(120, DisplayManager.getHeight()+40);
+		frame.setSize(120, DisplayManager.getHeight()+27);
 		frame.setLocation(DisplayManager.getX() + DisplayManager.getWidth(), DisplayManager.getY());
 		frame.getContentPane().setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
